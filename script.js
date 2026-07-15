@@ -37,17 +37,17 @@ const config = {
   //   action    -> "maps" ou "whatsapp"
   hotspots: {
     localizacao: {
-      x: 8,
-      y: 78,
-      width: 38,
-      height: 12,
+      x: 2,
+      y: 72,
+      width: 57,
+      height: 9,
       action: "maps",
     },
     confirmacao: {
-      x: 54,
-      y: 78,
-      width: 38,
-      height: 12,
+      x: 2,
+      y: 82.5,
+      width: 57,
+      height: 10.5,
       action: "whatsapp",
     },
   },
@@ -61,6 +61,7 @@ const inviteScreen = document.getElementById("invite-screen");
 const enterBtn = document.getElementById("enter-btn");
 
 const inviteImage = document.getElementById("invite-image");
+const inviteBackdrop = document.getElementById("invite-backdrop");
 const hotspotsLayer = document.getElementById("hotspots-layer");
 const inviteFrame = document.querySelector(".invite-frame");
 
@@ -74,13 +75,22 @@ const envelopeScene = document.getElementById("envelope-scene");
 const envelopeVisual = document.getElementById("envelope-visual");
 const letterCard = document.getElementById("letter-card");
 const letterArt = document.getElementById("letter-art");
+const letterBackdrop = document.getElementById("letter-backdrop");
 const letterSparkles = document.getElementById("letter-sparkles");
 
-/* Aplica config à imagem e ao áudio */
+/* Aplica config à imagem e ao áudio.
+   O "backdrop" repete a mesma imagem desfocada atrás da versão
+   nítida, preenchendo a tela sem cortar nada do design nem
+   deixar barras pretas nas laterais/topo. */
 inviteImage.src = config.backgroundImage;
+inviteBackdrop.style.backgroundImage = `url(${config.backgroundImage})`;
 letterArt.style.backgroundImage = `url(${config.backgroundImage})`;
+letterBackdrop.style.backgroundImage = `url(${config.backgroundImage})`;
+
 bgAudio.src = config.music;
+bgAudio.preload = "auto";
 bgAudio.volume = parseFloat(musicVolume.value);
+bgAudio.load();
 
 /* =========================================================
    TRANSIÇÃO CINEMATOGRÁFICA: ENVELOPE -> CONVITE
@@ -91,7 +101,7 @@ bgAudio.volume = parseFloat(musicVolume.value);
    do envelope e pela carta que emerge e se transforma no convite.
 
    Sequência, disparada por um único clique:
-   1) vibração leve + efeito sonoro suave (sintetizado, sem arquivo)
+   1) vibração leve (quando suportado)
    2) música ambiente inicia
    3) envelope reage (aumenta levemente)
    4) carta branca sobe com brilho e glitter dourado
@@ -112,7 +122,6 @@ function enterInvite() {
   if (navigator.vibrate) {
     navigator.vibrate(25);
   }
-  playOpenSfx();
 
   // 2) música ambiente inicia junto com o gesto de abrir
   attemptPlayMusic();
@@ -149,36 +158,6 @@ function enterInvite() {
     inviteScreen.removeAttribute("hidden");
     positionHotspots();
   }, 3650);
-}
-
-/* Efeito sonoro suave de abertura, sintetizado via Web Audio API —
-   evita depender de um arquivo de áudio extra. Toca dois tons
-   curtos e delicados, como um leve tilintar. */
-function playOpenSfx() {
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    const now = ctx.currentTime;
-
-    [880, 1320].forEach((freq, i) => {
-      const start = now + i * 0.07;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0, start);
-      gain.gain.linearRampToValueAtTime(0.05, start + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.5);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(start);
-      osc.stop(start + 0.55);
-    });
-
-    window.setTimeout(() => ctx.close(), 900);
-  } catch (err) {
-    // Se o navegador bloquear o áudio sintetizado, seguimos sem som
-  }
 }
 
 /* =========================================================
@@ -248,6 +227,12 @@ window.addEventListener("orientationchange", positionHotspots);
    MÚSICA AMBIENTE
    ========================================================= */
 let musicStarted = false;
+
+bgAudio.addEventListener("error", () => {
+  console.warn(
+    "Não foi possível carregar assets/music.mp3 — confira se o arquivo foi enviado ao repositório com esse nome exato."
+  );
+});
 
 function attemptPlayMusic() {
   if (musicStarted) return;
