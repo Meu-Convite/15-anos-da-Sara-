@@ -1,0 +1,589 @@
+/* =========================================================
+   JUSTECH CONVITES PREMIUM — style.css
+   Identidade: preto-azulado profundo + dourado champanhe
+   Tipografia: Cormorant Garamond (display) + Montserrat (UI)
+   ========================================================= */
+
+:root {
+  /* Cores */
+  --bg-deep: #07060c;
+  --bg-deep-2: #12101c;
+  --bg-deep-3: #1a1526;
+  --gold: #d4af6a;
+  --gold-bright: #f4e4bc;
+  --gold-dark: #8a6d3b;
+  --cream: #f5efe2;
+  --text-muted: #b9ad97;
+  --overlay-black: rgba(4, 3, 8, 0.55);
+
+  /* Envelope */
+  --olive: #565a37;
+  --olive-light: #767a4c;
+  --olive-dark: #383a22;
+  --wax: #96631f;
+  --wax-light: #c99a4a;
+  --wax-dark: #6b4315;
+
+  /* Tipografia */
+  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-ui: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Timing */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: var(--bg-deep);
+  color: var(--cream);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+img { -webkit-user-drag: none; user-select: none; }
+
+/* =========================================================
+   TELA INICIAL (SPLASH)
+   ========================================================= */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 50% 30%, var(--bg-deep-3) 0%, var(--bg-deep-2) 45%, var(--bg-deep) 100%);
+  overflow: hidden;
+  z-index: 10;
+  transition: opacity 1.1s var(--ease-soft), transform 1.1s var(--ease-soft), visibility 1.1s;
+}
+
+.splash.is-leaving {
+  opacity: 0;
+  transform: scale(1.08);
+  pointer-events: none;
+}
+
+#particles-canvas,
+#particles-canvas-invite {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.glow-radial {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  width: 60vmax;
+  height: 60vmax;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(212, 175, 106, 0.14) 0%, rgba(212, 175, 106, 0.05) 35%, transparent 70%);
+  filter: blur(10px);
+  animation: glowPulse 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 18vmax 4vmax rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+}
+
+/* Borboletas douradas */
+.butterflies { position: absolute; inset: 0; pointer-events: none; }
+
+.butterfly {
+  position: absolute;
+  width: 22px;
+  height: 16px;
+  color: var(--gold);
+  opacity: 0.55;
+  filter: drop-shadow(0 0 4px rgba(212, 175, 106, 0.6));
+  animation: flutter 12s ease-in-out infinite, wingFlap 0.6s ease-in-out infinite;
+}
+.butterfly svg { width: 100%; height: 100%; }
+
+.bf-1 { top: 22%; left: -5%; animation-duration: 16s, 0.55s; animation-delay: 0s, 0s; }
+.bf-2 { top: 65%; left: -8%; animation-duration: 20s, 0.5s; animation-delay: 3s, 0.1s; }
+.bf-3 { top: 45%; left: -6%; animation-duration: 18s, 0.6s; animation-delay: 7s, 0.2s; }
+
+@keyframes flutter {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(30vw, -6vh) rotate(8deg); }
+  50%  { transform: translate(60vw, 4vh) rotate(-6deg); }
+  75%  { transform: translate(90vw, -8vh) rotate(6deg); }
+  100% { transform: translate(120vw, 0) rotate(0deg); }
+}
+@keyframes wingFlap {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.6); }
+}
+
+/* Conteúdo central da splash */
+.envelope-scene {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+  animation: contentRise 1.4s var(--ease-soft) both;
+}
+
+@keyframes contentRise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+  margin: 0 0 22px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.85;
+}
+
+.invite-teaser {
+  margin: 30px 0 34px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.05rem, 2.6vw, 1.4rem);
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  transition: opacity 0.4s ease;
+}
+
+.envelope-scene.opening .invite-teaser,
+.envelope-scene.opening .eyebrow {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* =========================================================
+   ENVELOPE DE LUXO — verde-oliva + dourado
+   ========================================================= */
+
+.envelope {
+  position: relative;
+  width: min(320px, 78vw);
+  aspect-ratio: 3 / 2;
+  perspective: 900px;
+  filter: drop-shadow(0 24px 46px rgba(0, 0, 0, 0.55));
+}
+
+.envelope-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background: linear-gradient(155deg, var(--olive-light) 0%, var(--olive) 55%, var(--olive-dark) 100%);
+  border: 1px solid rgba(212, 175, 106, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.12);
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Dobra do bolso do envelope (linhas sutis que formam o "V" inferior) */
+.envelope-pocket {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 62%;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.16) 100%);
+  clip-path: polygon(0 0, 50% 68%, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Tampa triangular do envelope — abre em 3D ao clicar */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58%;
+  background: linear-gradient(160deg, var(--olive-light) 0%, var(--olive) 60%, var(--olive-dark) 100%);
+  border: 1px solid rgba(212, 175, 106, 0.4);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  transition: transform 1s var(--ease-soft);
+  z-index: 4;
+}
+
+.envelope-flap.opening {
+  transform: rotateX(-165deg);
+}
+
+/* Laço dourado */
+.envelope-ribbon {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 14px;
+  transform: translateY(-50%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ribbon-half {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold) 45%, var(--gold-bright));
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  transition: transform 0.6s var(--ease-soft), opacity 0.6s var(--ease-soft);
+}
+.ribbon-half-l { left: 0; transform-origin: left center; }
+.ribbon-half-r { right: 0; transform-origin: right center; }
+
+.ribbon-bow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  transition: transform 0.45s ease, opacity 0.45s ease;
+}
+.ribbon-bow::before,
+.ribbon-bow::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  width: 14px;
+  height: 16px;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  border-radius: 50% 50% 50% 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.ribbon-bow::before { left: 0; transform: rotate(-35deg); }
+.ribbon-bow::after { right: 0; transform: rotate(35deg) scaleX(-1); }
+
+.envelope-ribbon.opening .ribbon-half-l {
+  transform: translateX(-70%) rotate(-10deg);
+  opacity: 0;
+}
+.envelope-ribbon.opening .ribbon-half-r {
+  transform: translateX(70%) rotate(10deg);
+  opacity: 0;
+}
+.envelope-ribbon.opening .ribbon-bow {
+  transform: translate(-50%, -60%) scale(0.3);
+  opacity: 0;
+}
+
+/* Selo de cera com coroa */
+.wax-seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+}
+
+.seal-half {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--wax-light), var(--wax) 55%, var(--wax-dark) 100%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.5s var(--ease-soft), opacity 0.5s var(--ease-soft);
+}
+.seal-half-l { clip-path: inset(0 50% 0 0); }
+.seal-half-r { clip-path: inset(0 0 0 50%); }
+
+.seal-crown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.92;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.wax-seal.opening .seal-half-l {
+  transform: translate(-8px, 7px) rotate(-16deg);
+  opacity: 0;
+}
+.wax-seal.opening .seal-half-r {
+  transform: translate(8px, 7px) rotate(16deg);
+  opacity: 0;
+}
+.wax-seal.opening .seal-crown {
+  transform: translate(-50%, -50%) scale(0.4);
+  opacity: 0;
+}
+
+/* =========================================================
+   CARTA — sobe do envelope e se expande até virar o convite
+   ========================================================= */
+
+.letter-glow {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 60vmax;
+  height: 60vmax;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(244, 228, 188, 0.35) 0%, rgba(212, 175, 106, 0.1) 40%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 7;
+  transition: opacity 1.1s ease;
+}
+.letter-glow.pulse { opacity: 1; }
+
+.letter-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(230px, 60vw);
+  height: min(300px, 78vw, 78vh);
+  background-color: var(--bg-deep);
+  background-image: none;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 6px;
+  border: 1px solid rgba(212, 175, 106, 0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -46%) scale(0.7);
+  opacity: 0;
+  z-index: 8;
+  transition: opacity 0.9s var(--ease-soft), transform 0.9s var(--ease-soft);
+}
+
+.letter-card.rising {
+  transform: translate(-50%, -58%) scale(1);
+  opacity: 1;
+}
+
+.letter-card.expanding {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  border-radius: 0;
+  border-color: transparent;
+  box-shadow: none;
+  transform: none;
+  transition: opacity 0.9s var(--ease-soft),
+              top 1.1s var(--ease-soft), left 1.1s var(--ease-soft),
+              width 1.1s var(--ease-soft), height 1.1s var(--ease-soft),
+              border-radius 1.1s var(--ease-soft), box-shadow 1.1s var(--ease-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope-flap, .ribbon-half, .ribbon-bow, .seal-half, .seal-crown,
+  .letter-card, .letter-glow { transition-duration: 0.3s !important; }
+}
+
+.enter-btn {
+  position: relative;
+  padding: 16px 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 106, 0.55);
+  background: linear-gradient(180deg, rgba(212, 175, 106, 0.14), rgba(212, 175, 106, 0.04));
+  color: var(--gold-bright);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: transform 0.4s var(--ease-soft), border-color 0.4s var(--ease-soft), background 0.4s var(--ease-soft);
+}
+
+.enter-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  background: linear-gradient(180deg, rgba(212, 175, 106, 0.22), rgba(212, 175, 106, 0.06));
+}
+
+.enter-btn:active { transform: translateY(0) scale(0.98); }
+
+.enter-btn:disabled {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.enter-btn-glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle, rgba(244, 228, 188, 0.25), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.enter-btn:hover .enter-btn-glow { opacity: 1; }
+
+.enter-btn-label { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-radial, .butterfly { animation: none !important; }
+  .envelope-scene { animation: none; }
+}
+
+/* =========================================================
+   TELA PRINCIPAL (CONVITE)
+   ========================================================= */
+
+.invite {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 0;
+  animation: inviteFadeIn 1.2s var(--ease-soft) both;
+}
+
+@keyframes inviteFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.invite-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invite-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
+}
+
+.hotspots-layer {
+  position: absolute;
+  /* A camada de hotspots é posicionada exatamente sobre a imagem
+     renderizada (calculado via JS, pois object-fit:contain gera
+     barras vazias que não devem receber cliques) */
+  pointer-events: none;
+}
+
+.hotspot {
+  position: absolute;
+  pointer-events: auto;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Feedback discreto ao tocar/passar o mouse — some em produção se preferir 100% invisível */
+.hotspot:hover,
+.hotspot:focus-visible {
+  background: rgba(212, 175, 106, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.35);
+  outline: none;
+}
+
+/* =========================================================
+   CONTROLE DE MÚSICA FLUTUANTE
+   ========================================================= */
+
+.music-control {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(10, 8, 16, 0.55);
+  border: 1px solid rgba(212, 175, 106, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.music-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 106, 0.5);
+  background: rgba(212, 175, 106, 0.12);
+  color: var(--gold-bright);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s var(--ease-soft), background 0.3s ease;
+}
+.music-btn:hover { transform: scale(1.08); background: rgba(212, 175, 106, 0.22); }
+
+.music-volume {
+  width: 70px;
+  accent-color: var(--gold);
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .envelope { width: min(270px, 82vw); }
+  .invite-teaser { margin: 22px 0 28px; }
+  .enter-btn { padding: 14px 30px; font-size: 12px; }
+  .music-volume { width: 52px; }
+}
+
+@media (min-width: 1600px) {
+  .envelope { width: 380px; }
+}
+
+/* Telas muito baixas (paisagem em celular) */
+@media (max-height: 480px) {
+  .envelope { width: min(210px, 60vw); }
+  .eyebrow { margin-bottom: 10px; }
+  .invite-teaser { margin: 14px 0 18px; }
+}
