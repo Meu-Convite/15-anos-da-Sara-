@@ -16,64 +16,27 @@
 <body>
 
 <!-- ======================================================
-     TELA INICIAL — "O SELO" (splash cinematográfico)
+     TELA INICIAL — abertura cinematográfica do envelope
+     A arte do envelope é uma imagem pronta (assets/envelope.jpg)
+     e NUNCA é recriada em HTML/CSS — apenas posicionada, iluminada
+     e animada como um todo (fade, escala, brilho passando por cima).
      ====================================================== -->
 <section id="splash-screen" class="splash">
 
-  <!-- Camada de partículas / brilhos (canvas, desenhado via JS) -->
+  <!-- Camada de partículas douradas (canvas, desenhado via JS) -->
   <canvas id="particles-canvas" aria-hidden="true"></canvas>
 
-  <!-- Vinheta e glow radial -->
+  <!-- Glow ambiente e vinheta, complementando o feixe de luz já presente na imagem -->
   <div class="glow-radial" aria-hidden="true"></div>
   <div class="vignette" aria-hidden="true"></div>
 
-  <!-- Borboletas douradas flutuantes -->
-  <div class="butterflies" aria-hidden="true">
-    <span class="butterfly bf-1">
-      <svg viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 12c-3-8-11-11-14-8-2 2 1 9 8 10-7 1-10 8-8 10 3 3 11 0 14-8 3 8 11 11 14 8 2-2-1-9-8-10 7-1 10-8 8-10-3-3-11 0-14 8z" fill="currentColor"/></svg>
-    </span>
-    <span class="butterfly bf-2">
-      <svg viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 12c-3-8-11-11-14-8-2 2 1 9 8 10-7 1-10 8-8 10 3 3 11 0 14-8 3 8 11 11 14 8 2-2-1-9-8-10 7-1 10-8 8-10-3-3-11 0-14 8z" fill="currentColor"/></svg>
-    </span>
-    <span class="butterfly bf-3">
-      <svg viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 12c-3-8-11-11-14-8-2 2 1 9 8 10-7 1-10 8-8 10 3 3 11 0 14-8 3 8 11 11 14 8 2-2-1-9-8-10 7-1 10-8 8-10-3-3-11 0-14 8z" fill="currentColor"/></svg>
-    </span>
-  </div>
-
-  <!-- Conteúdo central: cena do envelope -->
   <div class="envelope-scene" id="envelope-scene">
 
-    <p class="eyebrow">Justech Convites</p>
-
-    <!-- Envelope de luxo (verde-oliva + dourado) -->
-    <div class="envelope" id="envelope">
-
-      <div class="envelope-body">
-        <span class="envelope-pocket" aria-hidden="true"></span>
-      </div>
-
-      <!-- Tampa do envelope (abre em 3D ao clicar) -->
-      <div class="envelope-flap" id="envelope-flap" aria-hidden="true"></div>
-
-      <!-- Laço dourado que se desfaz -->
-      <div class="envelope-ribbon" id="envelope-ribbon" aria-hidden="true">
-        <span class="ribbon-half ribbon-half-l"></span>
-        <span class="ribbon-half ribbon-half-r"></span>
-        <span class="ribbon-bow" aria-hidden="true"></span>
-      </div>
-
-      <!-- Selo de cera com coroa, que se rompe ao abrir -->
-      <div class="wax-seal" id="wax-seal" aria-hidden="true">
-        <span class="seal-half seal-half-l"></span>
-        <span class="seal-half seal-half-r"></span>
-        <svg class="seal-crown" id="seal-crown" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M20 110 L10 45 L45 68 L70 20 L100 55 L130 20 L155 68 L190 45 L180 110 Z" fill="#f4e4bc"/>
-          <rect x="16" y="108" width="168" height="14" rx="3" fill="#f4e4bc"/>
-        </svg>
-      </div>
+    <div class="envelope-visual" id="envelope-visual">
+      <img class="envelope-img" src="assets/envelope.jpg" alt="Envelope de convite de luxo, verde-oliva com laço dourado e selo de cera" draggable="false" />
+      <!-- Brilho que desliza sobre o laço dourado periodicamente -->
+      <span class="ribbon-glint" aria-hidden="true"></span>
     </div>
-
-    <p class="invite-teaser">Você recebeu um convite especial</p>
 
     <button id="enter-btn" class="enter-btn" type="button">
       <span class="enter-btn-glow" aria-hidden="true"></span>
@@ -82,18 +45,18 @@
 
   </div>
 
-  <!-- Carta que sobe do envelope e se expande até virar o convite.
-       Fica fora de .envelope para não herdar o "perspective" da
-       tampa 3D — assim a posição fixa dela permanece relativa à
-       tela inteira, permitindo a expansão suave em tela cheia. -->
-  <div class="letter-glow" id="letter-glow" aria-hidden="true"></div>
-  <div class="letter-card" id="letter-card" aria-hidden="true">
-    <div class="letter-image" id="letter-image"></div>
-    <svg class="letter-monogram" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M20 110 L10 45 L45 68 L70 20 L100 55 L130 20 L155 68 L190 45 L180 110 Z" fill="#d4af6a"/>
-      <rect x="16" y="108" width="168" height="14" rx="3" fill="#d4af6a"/>
-    </svg>
+  <!-- Carta branca elegante que sobe do envelope e se transforma no convite.
+       Fica fora de .envelope-scene, em position:fixed, para poder se
+       expandir suavemente até preencher a tela inteira. -->
+  <div class="letter-sparkles" id="letter-sparkles" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
   </div>
+
+  <div class="letter-card" id="letter-card" aria-hidden="true">
+    <div class="letter-paper" aria-hidden="true"></div>
+    <div class="letter-art" id="letter-art" aria-hidden="true"></div>
+  </div>
+
 </section>
 
 <!-- ======================================================
