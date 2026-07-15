@@ -71,29 +71,33 @@ const musicVolume = document.getElementById("music-volume");
 
 /* Elementos da abertura cinematográfica (envelope) */
 const envelopeScene = document.getElementById("envelope-scene");
-const envelopeFlap = document.getElementById("envelope-flap");
-const envelopeRibbon = document.getElementById("envelope-ribbon");
-const waxSeal = document.getElementById("wax-seal");
+const envelopeVisual = document.getElementById("envelope-visual");
 const letterCard = document.getElementById("letter-card");
-const letterImage = document.getElementById("letter-image");
-const letterGlow = document.getElementById("letter-glow");
+const letterArt = document.getElementById("letter-art");
+const letterSparkles = document.getElementById("letter-sparkles");
 
 /* Aplica config à imagem e ao áudio */
 inviteImage.src = config.backgroundImage;
-letterImage.style.backgroundImage = `url(${config.backgroundImage})`;
+letterArt.style.backgroundImage = `url(${config.backgroundImage})`;
 bgAudio.src = config.music;
 bgAudio.volume = parseFloat(musicVolume.value);
 
 /* =========================================================
    TRANSIÇÃO CINEMATOGRÁFICA: ENVELOPE -> CONVITE
    -----------------------------------------------------------
+   A imagem do envelope (assets/envelope.jpg) nunca é redesenhada —
+   ela só é movida/escalada/desvanecida como um todo. O "abrir"
+   é sugerido pelo brilho que passa sobre o laço, pela leve reação
+   do envelope e pela carta que emerge e se transforma no convite.
+
    Sequência, disparada por um único clique:
-   1) selo de cera se rompe
-   2) laço dourado se desfaz
-   3) tampa do envelope abre em 3D
-   4) a carta sobe (com brilho sutil) e a música inicia
-   5) a carta se expande até preencher a tela
-   6) a tela do convite (imagem real) assume o lugar da carta
+   1) vibração leve + efeito sonoro suave (sintetizado, sem arquivo)
+   2) música ambiente inicia
+   3) envelope reage (aumenta levemente)
+   4) carta branca sobe com brilho e glitter dourado
+   5) carta ganha um leve realce ao se aproximar do topo (~70%)
+   6) carta funde (fade) com a arte do convite e se expande (zoom)
+      até preencher a tela — "a carta virou o convite"
    ========================================================= */
 enterBtn.addEventListener("click", enterInvite);
 
@@ -104,38 +108,77 @@ function enterInvite() {
   inviteOpened = true;
   enterBtn.disabled = true;
 
-  // 1) selo + 2) laço começam a se desfazer imediatamente
+  // 1) vibração leve (silenciosamente ignorada onde não houver suporte, ex.: iOS)
+  if (navigator.vibrate) {
+    navigator.vibrate(25);
+  }
+  playOpenSfx();
+
+  // 2) música ambiente inicia junto com o gesto de abrir
+  attemptPlayMusic();
+
+  // 3) o envelope reage suavemente ao toque
   envelopeScene.classList.add("opening");
-  waxSeal.classList.add("opening");
-  envelopeRibbon.classList.add("opening");
+  envelopeVisual.classList.add("opening");
 
-  // 3) a tampa abre logo em seguida
+  // 4) carta sobe do envelope, com brilho e glitter dourado
   window.setTimeout(() => {
-    envelopeFlap.classList.add("opening");
-  }, 350);
-
-  // 4) a carta sobe, acompanhada de brilho sutil — e a música começa aqui
-  window.setTimeout(() => {
-    letterGlow.classList.add("pulse");
+    letterSparkles.classList.add("active");
     letterCard.classList.add("rising");
-    attemptPlayMusic();
-  }, 1250);
+  }, 650);
 
+  // o envelope recua suavemente, cedendo lugar à carta
   window.setTimeout(() => {
-    letterGlow.classList.remove("pulse");
-  }, 2100);
+    envelopeVisual.classList.remove("opening");
+    envelopeVisual.classList.add("receding");
+  }, 1450);
 
-  // 5) a carta se expande suavemente até preencher a tela
+  // 5) leve realce ao se aproximar do topo da tela (~70%)
+  window.setTimeout(() => {
+    letterCard.classList.add("at-peak");
+  }, 2000);
+
+  // 6) a carta funde com o convite e se expande até tela cheia
   window.setTimeout(() => {
     letterCard.classList.add("expanding");
-  }, 2150);
+  }, 2450);
 
-  // 6) troca para a tela real do convite assim que a carta cobre a tela
+  // troca para a tela real do convite assim que a carta cobre a tela
   window.setTimeout(() => {
     splashScreen.setAttribute("hidden", "");
     inviteScreen.removeAttribute("hidden");
     positionHotspots();
-  }, 3250);
+  }, 3650);
+}
+
+/* Efeito sonoro suave de abertura, sintetizado via Web Audio API —
+   evita depender de um arquivo de áudio extra. Toca dois tons
+   curtos e delicados, como um leve tilintar. */
+function playOpenSfx() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const now = ctx.currentTime;
+
+    [880, 1320].forEach((freq, i) => {
+      const start = now + i * 0.07;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(0.05, start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.5);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.55);
+    });
+
+    window.setTimeout(() => ctx.close(), 900);
+  } catch (err) {
+    // Se o navegador bloquear o áudio sintetizado, seguimos sem som
+  }
 }
 
 /* =========================================================
