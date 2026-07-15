@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>XV Anos — Convite Digital | Justech</title>
+<meta name="description" content="Convite digital premium — Justech Convites" />
+
+<!-- Tipografia: serif de exibição elegante + sans utilitária discreta -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ======================================================
+     TELA INICIAL — "O SELO" (splash cinematográfico)
+     ====================================================== -->
+<section id="splash-screen" class="splash">
+
+  <!-- Camada de partículas / brilhos (canvas, desenhado via JS) -->
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+  <!-- Vinheta e glow radial -->
+  <div class="glow-radial" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- Borboletas douradas flutuantes -->
+  <div class="butterflies" aria-hidden="true">
+    <span class="butterfly bf-1">
+      <svg viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 12c-3-8-11-11-14-8-2 2 1 9 8 10-7 1-10 8-8 10 3 3 11 0 14-8 3 8 11 11 14 8 2-2-1-9-8-10 7-1 10-8 8-10-3-3-11 0-14 8z" fill="currentColor"/></svg>
+    </span>
+    <span class="butterfly bf-2">
+      <svg viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 12c-3-8-11-11-14-8-2 2 1 9 8 10-7 1-10 8-8 10 3 3 11 0 14-8 3 8 11 11 14 8 2-2-1-9-8-10 7-1 10-8 8-10-3-3-11 0-14 8z" fill="currentColor"/></svg>
+    </span>
+    <span class="butterfly bf-3">
+      <svg viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 12c-3-8-11-11-14-8-2 2 1 9 8 10-7 1-10 8-8 10 3 3 11 0 14-8 3 8 11 11 14 8 2-2-1-9-8-10 7-1 10-8 8-10-3-3-11 0-14 8z" fill="currentColor"/></svg>
+    </span>
+  </div>
+
+  <!-- Conteúdo central: cena do envelope -->
+  <div class="envelope-scene" id="envelope-scene">
+
+    <p class="eyebrow">Justech Convites</p>
+
+    <!-- Envelope de luxo (verde-oliva + dourado) -->
+    <div class="envelope" id="envelope">
+
+      <div class="envelope-body">
+        <span class="envelope-pocket" aria-hidden="true"></span>
+      </div>
+
+      <!-- Tampa do envelope (abre em 3D ao clicar) -->
+      <div class="envelope-flap" id="envelope-flap" aria-hidden="true"></div>
+
+      <!-- Laço dourado que se desfaz -->
+      <div class="envelope-ribbon" id="envelope-ribbon" aria-hidden="true">
+        <span class="ribbon-half ribbon-half-l"></span>
+        <span class="ribbon-half ribbon-half-r"></span>
+        <span class="ribbon-bow" aria-hidden="true"></span>
+      </div>
+
+      <!-- Selo de cera com coroa, que se rompe ao abrir -->
+      <div class="wax-seal" id="wax-seal" aria-hidden="true">
+        <span class="seal-half seal-half-l"></span>
+        <span class="seal-half seal-half-r"></span>
+        <svg class="seal-crown" id="seal-crown" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 110 L10 45 L45 68 L70 20 L100 55 L130 20 L155 68 L190 45 L180 110 Z" fill="#f4e4bc"/>
+          <rect x="16" y="108" width="168" height="14" rx="3" fill="#f4e4bc"/>
+        </svg>
+      </div>
+    </div>
+
+    <p class="invite-teaser">Você recebeu um convite especial</p>
+
+    <button id="enter-btn" class="enter-btn" type="button">
+      <span class="enter-btn-glow" aria-hidden="true"></span>
+      <span class="enter-btn-label">Abrir Convite</span>
+    </button>
+
+  </div>
+
+  <!-- Carta que sobe do envelope e se expande até virar o convite.
+       Fica fora de .envelope para não herdar o "perspective" da
+       tampa 3D — assim a posição fixa dela permanece relativa à
+       tela inteira, permitindo a expansão suave em tela cheia. -->
+  <div class="letter-glow" id="letter-glow" aria-hidden="true"></div>
+  <div class="letter-card" id="letter-card" aria-hidden="true"></div>
+</section>
+
+<!-- ======================================================
+     TELA PRINCIPAL — O CONVITE (imagem única + hotspots)
+     ====================================================== -->
+<section id="invite-screen" class="invite" hidden>
+
+  <!-- Partículas ambiente contínuas (mais discretas que na splash) -->
+  <canvas id="particles-canvas-invite" aria-hidden="true"></canvas>
+
+  <div class="invite-frame">
+    <img id="invite-image" class="invite-image" src="assets/convite.jpg" alt="Convite de XV Anos" draggable="false" />
+
+    <!-- Hotspots (áreas clicáveis invisíveis) são injetados aqui via JS,
+         a partir do objeto config.hotspots em script.js -->
+    <div id="hotspots-layer" class="hotspots-layer" aria-label="Ações do convite"></div>
+  </div>
+
+  <!-- Controle de música flutuante -->
+  <div id="music-control" class="music-control" role="group" aria-label="Controle de música">
+    <button id="music-toggle" class="music-btn" type="button" aria-label="Tocar música">
+      <span id="music-icon">▶</span>
+    </button>
+    <input id="music-volume" class="music-volume" type="range" min="0" max="1" step="0.01" value="0.6" aria-label="Volume da música" />
+  </div>
+
+</section>
+
+<audio id="bg-audio" src="assets/music.mp3" preload="none" loop></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
