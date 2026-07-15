@@ -257,6 +257,7 @@ img { -webkit-user-drag: none; user-select: none; }
     inset 0 0 0 1px rgba(212, 175, 106, 0.3),
     0 22px 60px rgba(0, 0, 0, 0.55),
     0 0 34px rgba(212, 175, 106, 0.16);
+  overflow: hidden;
   transform: translate(-50%, -46%) scale(0.65);
   opacity: 0;
   z-index: 8;
@@ -276,6 +277,20 @@ img { -webkit-user-drag: none; user-select: none; }
   background: radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.7), transparent 60%);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
   transition: opacity 0.6s ease;
+}
+
+/* Preenche a tela cheia sem barras pretas quando a carta se expande,
+   com uma versão desfocada da própria arte do convite atrás da
+   versão nítida (.letter-art) — mesmo recurso usado na tela final. */
+.letter-backdrop {
+  position: absolute;
+  inset: -10%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(60px) brightness(0.5) saturate(1.15);
+  transform: scale(1.1);
+  opacity: 0;
+  transition: opacity 1s ease;
 }
 
 .letter-art {
@@ -312,6 +327,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 .letter-card.expanding .letter-paper { opacity: 0; }
+.letter-card.expanding .letter-backdrop { opacity: 1; }
 .letter-card.expanding .letter-art {
   inset: 0;
   border-radius: 0;
@@ -401,9 +417,26 @@ img { -webkit-user-drag: none; user-select: none; }
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+/* Preenche os espaços que sobrariam nas laterais/topo (já que a
+   imagem usa object-fit:contain e não pode ser cortada) com uma
+   versão desfocada e escurecida da própria arte — assim a tela
+   parece cheia, sem barras pretas, sem cortar nada do convite. */
+.invite-backdrop {
+  position: absolute;
+  inset: -5%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(60px) brightness(0.5) saturate(1.15);
+  transform: scale(1.1);
+  z-index: 0;
 }
 
 .invite-image {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   max-height: 100%;
   width: auto;
@@ -415,6 +448,7 @@ img { -webkit-user-drag: none; user-select: none; }
 
 .hotspots-layer {
   position: absolute;
+  z-index: 2;
   /* A camada de hotspots é posicionada exatamente sobre a imagem
      renderizada (calculado via JS, pois object-fit:contain gera
      barras vazias que não devem receber cliques) */
