@@ -75,11 +75,12 @@ const envelopeFlap = document.getElementById("envelope-flap");
 const envelopeRibbon = document.getElementById("envelope-ribbon");
 const waxSeal = document.getElementById("wax-seal");
 const letterCard = document.getElementById("letter-card");
+const letterImage = document.getElementById("letter-image");
 const letterGlow = document.getElementById("letter-glow");
 
 /* Aplica config à imagem e ao áudio */
 inviteImage.src = config.backgroundImage;
-letterCard.style.backgroundImage = `url(${config.backgroundImage})`;
+letterImage.style.backgroundImage = `url(${config.backgroundImage})`;
 bgAudio.src = config.music;
 bgAudio.volume = parseFloat(musicVolume.value);
 
