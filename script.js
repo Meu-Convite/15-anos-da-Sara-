@@ -18,7 +18,7 @@ const config = {
   music: "assets/music.mp3",
 
   // Link do Google Maps do local da festa
-  mapsLink: "https://maps.app.goo.gl/jr1uB4LPSEsDQ8gy8",
+  mapsLink: "https://maps.google.com/?q=Local+da+Festa",
 
   // Número de WhatsApp que receberá a confirmação (formato: DDI+DDD+NÚMERO, só dígitos)
   whatsappNumber: "5524998694118",
@@ -29,44 +29,38 @@ const config = {
 
   // Áreas clicáveis invisíveis sobre a imagem do convite.
   // Cada hotspot é definido em PORCENTAGEM (0–100) em relação
-  // à própria imagem — assim funciona em qualquer resolução
-  // e pode ser reaproveitado trocando só os números ao criar
-  // uma nova arte de convite.
-  //   x, y      -> canto superior esquerdo da área clicável
-  //   width, ht -> largura/altura da área clicável
-  //   action    -> "maps" ou "whatsapp"
+  // à própria imagem — assim funciona em qualquer resolução.
   hotspots: {
     localizacao: {
-      x: 2,
-      y: 72,
-      width: 57,
-      height: 9,
+      x: 15,          // ← AJUSTE ESTES VALORES conforme a posição dos botões na sua imagem
+      y: 75,
+      width: 30,
+      height: 10,
       action: "maps",
       icon: "📍",
-      label: "Local da festa",
+      label: "LOCALIZAÇÃO",
     },
     confirmacao: {
-      x: 2,
-      y: 82.5,
-      width: 57,
-      height: 10.5,
+      x: 55,          // ← AJUSTE ESTES VALORES
+      y: 75,
+      width: 30,
+      height: 10,
       action: "whatsapp",
       icon: "✅",
-      label: "Confirmar presença",
+      label: "CONFIRMAR PRESENÇA",
     },
   },
 
   // Recorte da personagem (assets/personagem.png) — em PORCENTAGEM (0–100)
-  // da imagem do convite, indicando onde esse recorte deve ser encaixado
-  // por cima da arte original para animá-lo (respiração/balanço) sem
-  // nunca se desalinhar. Se trocar de arte/personagem, ajuste estes
-  // números e a imagem em assets/personagem.png.
+  // da imagem do convite. Se a personagem não estiver na nova imagem,
+  // você pode remover este bloco ou deixar com valores que a coloquem
+  // em um canto discreto.
   characterLayer: {
     src: "assets/personagem.png",
-    x: 58,
-    y: 30,
-    width: 42,
-    height: 68.5,
+    x: 60,   // ← AJUSTE para posicionar a personagem sobre o fundo claro
+    y: 20,
+    width: 30,
+    height: 60,
   },
 };
 
