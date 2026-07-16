@@ -53,7 +53,25 @@
   </div>
 
   <div class="letter-card" id="letter-card" aria-hidden="true">
+    <span class="letter-corner tl" aria-hidden="true"></span>
+    <span class="letter-corner tr" aria-hidden="true"></span>
+    <span class="letter-corner bl" aria-hidden="true"></span>
+    <span class="letter-corner br" aria-hidden="true"></span>
     <div class="letter-paper" aria-hidden="true"></div>
+    <div class="letter-foil-sweep" aria-hidden="true"></div>
+    <div class="letter-seal" id="letter-seal" aria-hidden="true">
+      <svg viewBox="0 0 100 100" width="100%" height="100%">
+        <circle cx="50" cy="50" r="47" fill="url(#sealGrad)" stroke="#f4e4bc" stroke-width="1.5"/>
+        <path d="M50 24 L56 40 L73 40 L59 50 L64 66 L50 56 L36 66 L41 50 L27 40 L44 40 Z" fill="#3a3320" opacity="0.85"/>
+        <defs>
+          <radialGradient id="sealGrad" cx="35%" cy="30%" r="80%">
+            <stop offset="0%" stop-color="#e9cf8f"/>
+            <stop offset="55%" stop-color="#b6813b"/>
+            <stop offset="100%" stop-color="#6b4315"/>
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
     <div class="letter-backdrop" id="letter-backdrop" aria-hidden="true"></div>
     <div class="letter-art" id="letter-art" aria-hidden="true"></div>
   </div>
@@ -70,7 +88,22 @@
 
   <div class="invite-frame">
     <div class="invite-backdrop" id="invite-backdrop" aria-hidden="true"></div>
-    <img id="invite-image" class="invite-image" src="assets/convite.jpg" alt="Convite de XV Anos" draggable="false" />
+    <div class="invite-image-wrap" id="invite-image-wrap">
+      <img id="invite-image" class="invite-image" src="assets/convite.jpg" alt="Convite de XV Anos" draggable="false" />
+    </div>
+
+    <!-- Recorte animado da personagem (assets/personagem.png), posicionado
+         via JS exatamente sobre a mesma figura na arte do convite (mesma
+         lógica de alinhamento usada nos hotspots). Ganha um leve balanço
+         contínuo (respiração + oscilação), sensação de movimento sutil
+         sem jamais se descolar da arte original. -->
+    <div id="character-frame" class="character-frame" aria-hidden="true">
+      <img id="character-layer" class="character-layer" src="assets/personagem.png" alt="" draggable="false" />
+    </div>
+
+    <!-- Faixa de luz que percorre o convite periodicamente, reforçando a
+         sensação de "convite vivo" -->
+    <div class="invite-shimmer" aria-hidden="true"></div>
 
     <!-- Hotspots (áreas clicáveis invisíveis) são injetados aqui via JS,
          a partir do objeto config.hotspots em script.js -->

@@ -42,6 +42,8 @@ const config = {
       width: 57,
       height: 9,
       action: "maps",
+      icon: "📍",
+      label: "Local da festa",
     },
     confirmacao: {
       x: 2,
@@ -49,7 +51,22 @@ const config = {
       width: 57,
       height: 10.5,
       action: "whatsapp",
+      icon: "✅",
+      label: "Confirmar presença",
     },
+  },
+
+  // Recorte da personagem (assets/personagem.png) — em PORCENTAGEM (0–100)
+  // da imagem do convite, indicando onde esse recorte deve ser encaixado
+  // por cima da arte original para animá-lo (respiração/balanço) sem
+  // nunca se desalinhar. Se trocar de arte/personagem, ajuste estes
+  // números e a imagem em assets/personagem.png.
+  characterLayer: {
+    src: "assets/personagem.png",
+    x: 58,
+    y: 30,
+    width: 42,
+    height: 68.5,
   },
 };
 
@@ -64,6 +81,8 @@ const inviteImage = document.getElementById("invite-image");
 const inviteBackdrop = document.getElementById("invite-backdrop");
 const hotspotsLayer = document.getElementById("hotspots-layer");
 const inviteFrame = document.querySelector(".invite-frame");
+const characterFrame = document.getElementById("character-frame");
+const characterLayer = document.getElementById("character-layer");
 
 const bgAudio = document.getElementById("bg-audio");
 const musicToggle = document.getElementById("music-toggle");
@@ -86,6 +105,14 @@ inviteImage.src = config.backgroundImage;
 inviteBackdrop.style.backgroundImage = `url(${config.backgroundImage})`;
 letterArt.style.backgroundImage = `url(${config.backgroundImage})`;
 letterBackdrop.style.backgroundImage = `url(${config.backgroundImage})`;
+if (characterLayer && config.characterLayer && config.characterLayer.src) {
+  characterLayer.addEventListener("error", () => {
+    // Se o novo evento não tiver um recorte de personagem, some
+    // silenciosamente em vez de mostrar um ícone de imagem quebrada.
+    characterFrame.style.display = "none";
+  });
+  characterLayer.src = config.characterLayer.src;
+}
 
 bgAudio.src = config.music;
 bgAudio.preload = "auto";
@@ -156,7 +183,7 @@ function enterInvite() {
   window.setTimeout(() => {
     splashScreen.setAttribute("hidden", "");
     inviteScreen.removeAttribute("hidden");
-    positionHotspots();
+    positionOverlays();
   }, 3650);
 }
 
@@ -166,26 +193,45 @@ function enterInvite() {
 function buildHotspots() {
   hotspotsLayer.innerHTML = "";
 
-  Object.entries(config.hotspots).forEach(([name, spot]) => {
+  Object.entries(config.hotspots).forEach(([name, spot], index) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "hotspot";
     btn.dataset.name = name;
-    btn.setAttribute("aria-label", hotspotLabel(name, spot.action));
+    btn.style.animationDelay = index * 0.4 + "s";
+    btn.setAttribute("aria-label", hotspotLabel(name, spot));
 
     btn.style.left = spot.x + "%";
     btn.style.top = spot.y + "%";
     btn.style.width = spot.width + "%";
     btn.style.height = spot.height + "%";
 
-    btn.addEventListener("click", () => handleHotspotAction(spot.action));
+    // Ripple dourado ao toque/clique — reforça a sensação de botão "de verdade"
+    btn.addEventListener("pointerdown", (e) => {
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement("span");
+      ripple.className = "hotspot-ripple";
+      const size = Math.max(rect.width, rect.height) * 1.6;
+      ripple.style.width = size + "px";
+      ripple.style.height = size + "px";
+      ripple.style.left = (e.clientX - rect.left) + "px";
+      ripple.style.top = (e.clientY - rect.top) + "px";
+      btn.appendChild(ripple);
+      ripple.addEventListener("animationend", () => ripple.remove());
+    });
+
+    btn.addEventListener("click", () => {
+      if (navigator.vibrate) navigator.vibrate(15);
+      handleHotspotAction(spot.action);
+    });
     hotspotsLayer.appendChild(btn);
   });
 }
 
-function hotspotLabel(name, action) {
-  if (action === "maps") return "Ver localização no mapa";
-  if (action === "whatsapp") return "Confirmar presença via WhatsApp";
+function hotspotLabel(name, spot) {
+  if (spot.label) return spot.label;
+  if (spot.action === "maps") return "Ver localização no mapa";
+  if (spot.action === "whatsapp") return "Confirmar presença via WhatsApp";
   return name;
 }
 
@@ -213,15 +259,87 @@ function positionHotspots() {
   hotspotsLayer.style.height = imgRect.height + "px";
 }
 
+/* Posiciona o recorte animado da personagem exatamente sobre a mesma
+   figura na arte do convite, usando o mesmo retângulo real da imagem
+   renderizada (mesma lógica de positionHotspots). */
+function positionCharacterLayer() {
+  if (!characterFrame || !config.characterLayer) return;
+  const frameRect = inviteFrame.getBoundingClientRect();
+  const imgRect = inviteImage.getBoundingClientRect();
+  const c = config.characterLayer;
+
+  const left = imgRect.left - frameRect.left + (c.x / 100) * imgRect.width;
+  const top = imgRect.top - frameRect.top + (c.y / 100) * imgRect.height;
+  const width = (c.width / 100) * imgRect.width;
+  const height = (c.height / 100) * imgRect.height;
+
+  characterFrame.style.left = left + "px";
+  characterFrame.style.top = top + "px";
+  characterFrame.style.width = width + "px";
+  characterFrame.style.height = height + "px";
+}
+
+function positionOverlays() {
+  positionHotspots();
+  positionCharacterLayer();
+}
+
 buildHotspots();
 
 if (inviteImage.complete) {
-  positionHotspots();
+  positionOverlays();
 } else {
-  inviteImage.addEventListener("load", positionHotspots);
+  inviteImage.addEventListener("load", positionOverlays);
 }
-window.addEventListener("resize", positionHotspots);
-window.addEventListener("orientationchange", positionHotspots);
+window.addEventListener("resize", positionOverlays);
+window.addEventListener("orientationchange", positionOverlays);
+
+/* =========================================================
+   PARALAXE SUTIL — o convite reage ao ponteiro (desktop) e à
+   inclinação do aparelho (celular), dando profundidade e vida
+   à cena, sem nunca desalinhar hotspots ou a personagem (o tilt
+   é aplicado ao .invite-frame inteiro, como um único plano rígido).
+   ========================================================= */
+(function setupParallaxTilt() {
+  const reduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced) return;
+
+  const maxTilt = 5; // graus
+  let targetX = 0, targetY = 0, curX = 0, curY = 0;
+  let rafId = null;
+
+  function applyTilt() {
+    curX += (targetX - curX) * 0.08;
+    curY += (targetY - curY) * 0.08;
+    inviteFrame.style.transform =
+      `rotateX(${curY}deg) rotateY(${curX}deg)`;
+    rafId = requestAnimationFrame(applyTilt);
+  }
+
+  window.addEventListener("pointermove", (e) => {
+    const nx = (e.clientX / window.innerWidth) * 2 - 1;
+    const ny = (e.clientY / window.innerHeight) * 2 - 1;
+    targetX = nx * maxTilt;
+    targetY = -ny * maxTilt;
+  });
+
+  window.addEventListener("pointerleave", () => {
+    targetX = 0;
+    targetY = 0;
+  });
+
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", (e) => {
+      if (e.gamma === null || e.beta === null) return;
+      targetX = Math.max(-maxTilt, Math.min(maxTilt, e.gamma / 4));
+      targetY = Math.max(-maxTilt, Math.min(maxTilt, (e.beta - 45) / 6));
+    });
+  }
+
+  rafId = requestAnimationFrame(applyTilt);
+})();
 
 /* =========================================================
    MÚSICA AMBIENTE
