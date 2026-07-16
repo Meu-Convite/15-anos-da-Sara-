@@ -32,19 +32,19 @@ const config = {
   // à própria imagem — assim funciona em qualquer resolução.
   hotspots: {
     localizacao: {
-      x: 10,          // ← AJUSTE ESTES VALORES conforme a posição dos botões na sua imagem
-      y: 78,
-      width: 20,
-      height: 10,
+      x: 16,          // ← AJUSTE ESTES VALORES conforme a posição dos botões na sua imagem
+      y: 79,
+      width: 26,
+      height: 6,
       action: "maps",
       icon: "📍",
       label: "LOCALIZAÇÃO",
     },
     confirmacao: {
-      x: 55,          // ← AJUSTE ESTES VALORES
-      y: 78,
-      width: 45,
-      height: 15,
+      x: 58,          // ← AJUSTE ESTES VALORES
+      y: 79,
+      width: 26,
+      height: 6,
       action: "whatsapp",
       icon: "✅",
       label: "CONFIRMAR PRESENÇA",
