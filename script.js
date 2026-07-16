@@ -35,7 +35,7 @@ const config = {
       x: 10,          // ← AJUSTE ESTES VALORES conforme a posição dos botões na sua imagem
       y: 78,
       width: 20,
-      height: 40,
+      height: 10,
       action: "maps",
       icon: "📍",
       label: "LOCALIZAÇÃO",
