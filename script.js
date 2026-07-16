@@ -33,7 +33,7 @@ const config = {
   hotspots: {
     localizacao: {
       x: 16,          // ← AJUSTE ESTES VALORES conforme a posição dos botões na sua imagem
-      y: 45,
+      y: 60,
       width: 26,
       height: 6,
       action: "maps",
