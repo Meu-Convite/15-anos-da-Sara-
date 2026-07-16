@@ -18,7 +18,7 @@ const config = {
   music: "assets/music.mp3",
 
   // Link do Google Maps do local da festa
-  mapsLink: "VQMX+Q74 Três Rios - Piracema, Três Rios - RJ",
+  mapsLink: "https://maps.app.goo.gl/jr1uB4LPSEsDQ8gy8",
 
   // Número de WhatsApp que receberá a confirmação (formato: DDI+DDD+NÚMERO, só dígitos)
   whatsappNumber: "5524998694118",
