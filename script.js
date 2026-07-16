@@ -182,6 +182,8 @@ function enterInvite() {
   // troca para a tela real do convite assim que a carta cobre a tela
   window.setTimeout(() => {
     splashScreen.setAttribute("hidden", "");
+    splashScreen.style.display = "none";
+    splashScreen.style.pointerEvents = "none";
     inviteScreen.removeAttribute("hidden");
     positionOverlays();
   }, 3650);

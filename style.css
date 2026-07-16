@@ -74,6 +74,18 @@ img { -webkit-user-drag: none; user-select: none; }
   transition: opacity 1.1s var(--ease-soft), transform 1.1s var(--ease-soft), visibility 1.1s;
 }
 
+/* IMPORTANTE: sem esta regra, o atributo [hidden] definido via JS
+   é silenciosamente ignorado (o "display: flex" acima, sendo uma
+   regra de autor, sempre vence o "display: none" padrão do
+   navegador para [hidden], mesmo com especificidade "empatada").
+   Isso deixava a tela do envelope (com a carta em position:fixed
+   cobrindo 100% da tela) por cima da tela real do convite, mesmo
+   "escondida" — bloqueando todo clique nos botões e no áudio. */
+.splash[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+}
+
 .splash.is-leaving {
   opacity: 0;
   transform: scale(1.08);
