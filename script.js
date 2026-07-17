@@ -42,7 +42,7 @@ const config = {
     },
     confirmacao: {
       x: 22,          // ← AJUSTE ESTES VALORES
-      y: 79,
+      y: 69,
       width: 26,
       height: 6,
       action: "whatsapp",
