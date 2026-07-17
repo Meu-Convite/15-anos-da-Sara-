@@ -41,7 +41,7 @@ const config = {
       label: "LOCALIZAÇÃO",
     },
     confirmacao: {
-      x: 58,          // ← AJUSTE ESTES VALORES
+      x: 38,          // ← AJUSTE ESTES VALORES
       y: 79,
       width: 26,
       height: 6,
