@@ -11,6 +11,14 @@
    ========================================================= */
 const config = {
 
+  // IMPORTANTE — cache do navegador / CDN do GitHub Pages:
+  // Sempre que você substituir qualquer arquivo em /assets (convite,
+  // personagem, música, envelope), MUDE este valor (ex.: para a data
+  // de hoje). Isso força o celular/navegador a baixar os arquivos
+  // novos em vez de mostrar a versão antiga guardada em cache — é
+  // o mesmo motivo de às vezes só funcionar "trocando de navegador".
+  CACHE_VERSION: "20260717a",
+
   // Imagem única que representa o convite inteiro
   backgroundImage: "assets/convite.jpg",
 
@@ -21,7 +29,7 @@ const config = {
   mapsLink: "https://maps.google.com/?q=Local+da+Festa",
 
   // Número de WhatsApp que receberá a confirmação (formato: DDI+DDD+NÚMERO, só dígitos)
-  whatsappNumber: "5524998694118",
+  whatsappNumber: "5524999999999",
 
   // Mensagem automática de confirmação de presença
   whatsappMessage:
@@ -29,38 +37,44 @@ const config = {
 
   // Áreas clicáveis invisíveis sobre a imagem do convite.
   // Cada hotspot é definido em PORCENTAGEM (0–100) em relação
-  // à própria imagem — assim funciona em qualquer resolução.
+  // à própria imagem — assim funciona em qualquer resolução
+  // e pode ser reaproveitado trocando só os números ao criar
+  // uma nova arte de convite.
+  //   x, y      -> canto superior esquerdo da área clicável
+  //   width, ht -> largura/altura da área clicável
+  //   action    -> "maps" ou "whatsapp"
   hotspots: {
     localizacao: {
-      x: 18,          // ← AJUSTE ESTES VALORES conforme a posição dos botões na sua imagem
-      y: 80,
-      width: 26,
-      height: 6,
+      x: 22,
+      y: 72,
+      width: 56,
+      height: 7.5,
       action: "maps",
       icon: "📍",
-      label: "LOCALIZAÇÃO",
+      label: "Local da festa",
     },
     confirmacao: {
-      x: 22,          // ← AJUSTE ESTES VALORES
-      y: 69,
-      width: 26,
-      height: 6,
+      x: 22,
+      y: 79.8,
+      width: 56,
+      height: 6.2,
       action: "whatsapp",
       icon: "✅",
-      label: "CONFIRMAR PRESENÇA",
+      label: "Confirmar presença",
     },
   },
 
   // Recorte da personagem (assets/personagem.png) — em PORCENTAGEM (0–100)
-  // da imagem do convite. Se a personagem não estiver na nova imagem,
-  // você pode remover este bloco ou deixar com valores que a coloquem
-  // em um canto discreto.
+  // da imagem do convite, indicando onde esse recorte deve ser encaixado
+  // por cima da arte original para animá-lo (respiração/balanço) sem
+  // nunca se desalinhar. Se trocar de arte/personagem, ajuste estes
+  // números e a imagem em assets/personagem.png.
   characterLayer: {
     src: "assets/personagem.png",
-    x: 60,   // ← AJUSTE para posicionar a personagem sobre o fundo claro
-    y: 20,
-    width: 30,
-    height: 60,
+    x: 78,
+    y: 86,
+    width: 20.5,
+    height: 14,
   },
 };
 
@@ -91,24 +105,34 @@ const letterArt = document.getElementById("letter-art");
 const letterBackdrop = document.getElementById("letter-backdrop");
 const letterSparkles = document.getElementById("letter-sparkles");
 
+/* Junta o caminho do arquivo com a versão de cache (veja
+   CACHE_VERSION no topo do arquivo) — garante que, ao trocar
+   qualquer imagem/áudio, o navegador baixe a versão nova. */
+function withCacheBust(path) {
+  if (!path) return path;
+  const sep = path.includes("?") ? "&" : "?";
+  return `${path}${sep}v=${encodeURIComponent(config.CACHE_VERSION || "1")}`;
+}
+
 /* Aplica config à imagem e ao áudio.
    O "backdrop" repete a mesma imagem desfocada atrás da versão
    nítida, preenchendo a tela sem cortar nada do design nem
    deixar barras pretas nas laterais/topo. */
-inviteImage.src = config.backgroundImage;
-inviteBackdrop.style.backgroundImage = `url(${config.backgroundImage})`;
-letterArt.style.backgroundImage = `url(${config.backgroundImage})`;
-letterBackdrop.style.backgroundImage = `url(${config.backgroundImage})`;
+const bgImageUrl = withCacheBust(config.backgroundImage);
+inviteImage.src = bgImageUrl;
+inviteBackdrop.style.backgroundImage = `url(${bgImageUrl})`;
+letterArt.style.backgroundImage = `url(${bgImageUrl})`;
+letterBackdrop.style.backgroundImage = `url(${bgImageUrl})`;
 if (characterLayer && config.characterLayer && config.characterLayer.src) {
   characterLayer.addEventListener("error", () => {
     // Se o novo evento não tiver um recorte de personagem, some
     // silenciosamente em vez de mostrar um ícone de imagem quebrada.
     characterFrame.style.display = "none";
   });
-  characterLayer.src = config.characterLayer.src;
+  characterLayer.src = withCacheBust(config.characterLayer.src);
 }
 
-bgAudio.src = config.music;
+bgAudio.src = withCacheBust(config.music);
 bgAudio.preload = "auto";
 bgAudio.volume = parseFloat(musicVolume.value);
 bgAudio.load();
