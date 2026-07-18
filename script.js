@@ -17,7 +17,7 @@ const config = {
   // de hoje). Isso força o celular/navegador a baixar os arquivos
   // novos em vez de mostrar a versão antiga guardada em cache — é
   // o mesmo motivo de às vezes só funcionar "trocando de navegador".
-  CACHE_VERSION: "20260717a",
+  CACHE_VERSION: "20260717b",
 
   // Imagem única que representa o convite inteiro
   backgroundImage: "assets/convite.jpg",
