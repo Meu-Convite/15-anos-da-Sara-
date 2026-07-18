@@ -47,7 +47,7 @@ const config = {
     localizacao: {
       x: 22,
       y: 72,
-      width: 56,
+      width: 54,
       height: 7.5,
       action: "maps",
       icon: "📍",
