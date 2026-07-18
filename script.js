@@ -48,7 +48,7 @@ const config = {
       x: 22,
       y: 72,
       width: 54,
-      height: 7.5,
+      height: 6.5,
       action: "maps",
       icon: "📍",
       label: "Local da festa",
