@@ -702,13 +702,13 @@ img { -webkit-user-drag: none; user-select: none; }
 
 .music-control {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
+  right: 14px;
+  bottom: 14px;
   z-index: 20;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
+  gap: 7px;
+  padding: 6px 10px;
   border-radius: 999px;
   background: rgba(10, 8, 16, 0.55);
   border: 1px solid rgba(212, 175, 106, 0.35);
@@ -717,13 +717,13 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 .music-btn {
-  width: 34px;
-  height: 34px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 1px solid rgba(212, 175, 106, 0.5);
   background: rgba(212, 175, 106, 0.12);
   color: var(--gold-bright);
-  font-size: 13px;
+  font-size: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -732,7 +732,7 @@ img { -webkit-user-drag: none; user-select: none; }
 .music-btn:hover { transform: scale(1.08); background: rgba(212, 175, 106, 0.22); }
 
 .music-volume {
-  width: 70px;
+  width: 46px;
   accent-color: var(--gold);
 }
 
@@ -743,7 +743,7 @@ img { -webkit-user-drag: none; user-select: none; }
 @media (max-width: 600px) {
   .envelope-visual { width: min(230px, 80vw); margin-bottom: 26px; }
   .enter-btn { padding: 14px 30px; font-size: 12px; }
-  .music-volume { width: 52px; }
+  .music-volume { width: 36px; }
 }
 
 @media (min-width: 1600px) {
