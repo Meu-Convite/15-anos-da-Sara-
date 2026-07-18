@@ -71,8 +71,8 @@ const config = {
   // números e a imagem em assets/personagem.png.
   characterLayer: {
     src: "assets/personagem.png",
-    x: 76,
-    y: 72,
+    x: 75.5,
+    y: 73.4,
     width: 24,
     height: 22.3,
   },
