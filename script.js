@@ -73,8 +73,8 @@ const config = {
     src: "assets/personagem.png",
     x: 80,
     y: 72,
-    width: 19,
-    height: 17.7,
+    width: 25,
+    height: 23.3,
   },
 };
 
