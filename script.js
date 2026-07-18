@@ -45,19 +45,19 @@ const config = {
   //   action    -> "maps" ou "whatsapp"
   hotspots: {
     localizacao: {
-      x: 22,
-      y: 72,
-      width: 54,
-      height: 7.0,
+      x: 24.8,
+      y: 73.4,
+      width: 50.4,
+      height: 4.4,
       action: "maps",
       icon: "📍",
       label: "Local da festa",
     },
     confirmacao: {
-      x: 22,
-      y: 79.8,
-      width: 56,
-      height: 6.2,
+      x: 24.8,
+      y: 80.2,
+      width: 50.4,
+      height: 4.4,
       action: "whatsapp",
       icon: "✅",
       label: "Confirmar presença",
