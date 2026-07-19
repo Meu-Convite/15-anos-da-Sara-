@@ -17,7 +17,7 @@ const config = {
   // de hoje). Isso força o celular/navegador a baixar os arquivos
   // novos em vez de mostrar a versão antiga guardada em cache — é
   // o mesmo motivo de às vezes só funcionar "trocando de navegador".
-  CACHE_VERSION: "20260717c",
+  CACHE_VERSION: "20260718a",
 
   // Imagem única que representa o convite inteiro
   backgroundImage: "assets/convite.jpg",
@@ -45,19 +45,19 @@ const config = {
   //   action    -> "maps" ou "whatsapp"
   hotspots: {
     localizacao: {
-      x: 24.8,
-      y: 73.4,
-      width: 50.4,
-      height: 4.4,
+      x: 15,
+      y: 82.6,
+      width: 30.8,
+      height: 7.2,
       action: "maps",
       icon: "📍",
       label: "Local da festa",
     },
     confirmacao: {
-      x: 24.8,
-      y: 80.2,
-      width: 50.4,
-      height: 4.4,
+      x: 48.7,
+      y: 82.6,
+      width: 30.8,
+      height: 7.2,
       action: "whatsapp",
       icon: "✅",
       label: "Confirmar presença",
@@ -71,10 +71,10 @@ const config = {
   // números e a imagem em assets/personagem.png.
   characterLayer: {
     src: "assets/personagem.png",
-    x: 75.5,
-    y: 73.4,
-    width: 24,
-    height: 22.3,
+    x: 24.5,
+    y: 48,
+    width: 51,
+    height: 40,
   },
 };
 

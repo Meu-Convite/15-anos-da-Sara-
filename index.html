@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css?v=20260717c" />
+<link rel="stylesheet" href="style.css?v=20260718a" />
 </head>
 <body>
 
@@ -33,7 +33,7 @@
   <div class="envelope-scene" id="envelope-scene">
 
     <div class="envelope-visual" id="envelope-visual">
-      <img class="envelope-img" src="assets/envelope.jpg?v=20260717c" alt="Envelope de convite de luxo, verde-oliva com laço dourado e selo de cera" draggable="false" />
+      <img class="envelope-img" src="assets/envelope.jpg?v=20260718a" alt="Envelope de convite de luxo, verde-oliva com laço dourado e selo de cera" draggable="false" />
       <!-- Brilho que desliza sobre o laço dourado periodicamente -->
       <span class="ribbon-glint" aria-hidden="true"></span>
     </div>
@@ -108,46 +108,16 @@
     <!-- Borboletas douradas que atravessam a tela em voos suaves e
          contínuos, em looping, com tamanhos/tempos/rotas diferentes -->
     <div class="butterflies-layer" aria-hidden="true">
-      <div class="butterfly b1">
-        <svg viewBox="0 0 100 70" width="100%" height="100%">
-          <g class="wing wing-l"><path d="M50 35 C 30 5, 0 5, 4 30 C 6 46, 30 46, 50 35 Z" fill="#e0b95c"/></g>
-          <g class="wing wing-r"><path d="M50 35 C 70 5, 100 5, 96 30 C 94 46, 70 46, 50 35 Z" fill="#d4a94a"/></g>
-          <ellipse cx="50" cy="35" rx="2.6" ry="10" fill="#5c4a22"/>
-        </svg>
-      </div>
-      <div class="butterfly b2">
-        <svg viewBox="0 0 100 70" width="100%" height="100%">
-          <g class="wing wing-l"><path d="M50 35 C 30 5, 0 5, 4 30 C 6 46, 30 46, 50 35 Z" fill="#f0d99a"/></g>
-          <g class="wing wing-r"><path d="M50 35 C 70 5, 100 5, 96 30 C 94 46, 70 46, 50 35 Z" fill="#e0b95c"/></g>
-          <ellipse cx="50" cy="35" rx="2.6" ry="10" fill="#5c4a22"/>
-        </svg>
-      </div>
-      <div class="butterfly b3">
-        <svg viewBox="0 0 100 70" width="100%" height="100%">
-          <g class="wing wing-l"><path d="M50 35 C 30 5, 0 5, 4 30 C 6 46, 30 46, 50 35 Z" fill="#d4a94a"/></g>
-          <g class="wing wing-r"><path d="M50 35 C 70 5, 100 5, 96 30 C 94 46, 70 46, 50 35 Z" fill="#f0d99a"/></g>
-          <ellipse cx="50" cy="35" rx="2.6" ry="10" fill="#5c4a22"/>
-        </svg>
-      </div>
+      <div class="butterfly b1"><img src="assets/butterfly.png" alt="" draggable="false" /></div>
+      <div class="butterfly b2"><img src="assets/butterfly.png" alt="" draggable="false" /></div>
+      <div class="butterfly b3"><img src="assets/butterfly.png" alt="" draggable="false" /></div>
     </div>
 
     <!-- Sapinho que salta pela tela em direção à personagem, faz uma
          pausa perto dela, e depois volta — um pequeno "conto" que
          se repete em loop -->
     <div id="frog" class="frog" aria-hidden="true">
-      <svg viewBox="0 0 90 70" width="100%" height="100%">
-        <ellipse cx="45" cy="46" rx="30" ry="20" fill="#7d8f3f"/>
-        <ellipse cx="45" cy="44" rx="24" ry="15" fill="#95a94c"/>
-        <ellipse cx="22" cy="20" rx="10" ry="10" fill="#7d8f3f"/>
-        <ellipse cx="68" cy="20" rx="10" ry="10" fill="#7d8f3f"/>
-        <circle cx="22" cy="18" r="5" fill="#2f2a18"/>
-        <circle cx="68" cy="18" r="5" fill="#2f2a18"/>
-        <circle cx="20" cy="16" r="1.6" fill="#fff8e6"/>
-        <circle cx="66" cy="16" r="1.6" fill="#fff8e6"/>
-        <path d="M32 52 Q45 60 58 52" stroke="#4a5a26" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <ellipse cx="14" cy="56" rx="8" ry="5" fill="#7d8f3f"/>
-        <ellipse cx="76" cy="56" rx="8" ry="5" fill="#7d8f3f"/>
-      </svg>
+      <img src="assets/frog.png" alt="" draggable="false" />
     </div>
 
     <!-- Hotspots (áreas clicáveis invisíveis) são injetados aqui via JS,
@@ -167,6 +137,6 @@
 
 <audio id="bg-audio" src="assets/music.mp3" preload="none" loop></audio>
 
-<script src="script.js?v=20260717c"></script>
+<script src="script.js?v=20260718a"></script>
 </body>
 </html>
