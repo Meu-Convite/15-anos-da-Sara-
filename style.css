@@ -1197,9 +1197,10 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   ASSINATURA — "Desenvolvido por LéoTech", discreta, no rodapé.
-   Some sozinha em telas muito baixas pra nunca brigar com os
-   botões de ação, que são o que importa por último na tela.
+   ASSINATURA — "Desenvolvido por LéoTech", discreta, no rodapé,
+   com efeito cromado/dourado (mesmo gradiente aplicado ao texto
+   inteiro, via background-clip: text). Some sozinha em telas
+   muito baixas pra nunca brigar com os botões de ação.
    ========================================================= */
 .studio-signature {
   position: absolute;
@@ -1213,24 +1214,32 @@ img { -webkit-user-drag: none; user-select: none; }
   font-family: var(--font-display);
   font-size: clamp(0.58rem, 2vw, 0.72rem);
   letter-spacing: 0.03em;
-  color: rgba(212, 175, 106, 0.75);
   opacity: 0.95;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.3s ease, color 0.3s ease, transform 0.3s var(--ease-soft);
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-soft), filter 0.3s ease;
 }
 
 .studio-signature span {
   font-family: 'Alex Brush', cursive;
   font-size: 1.5em;
-  color: var(--gold-dark);
   margin-left: 2px;
+}
+
+.studio-signature,
+.studio-signature span {
+  background: linear-gradient(180deg, #fff6d8 0%, #d4af6a 35%, #8a6d3b 55%, #d4af6a 75%, #fff6d8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .studio-signature:hover,
 .studio-signature:focus-visible {
   opacity: 1;
-  color: rgba(244, 228, 188, 0.95);
+  filter: brightness(1.15);
   transform: translateX(-50%) translateY(-1px);
   outline: none;
 }
