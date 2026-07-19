@@ -74,13 +74,6 @@ img { -webkit-user-drag: none; user-select: none; }
   transition: opacity 1.1s var(--ease-soft), transform 1.1s var(--ease-soft), visibility 1.1s;
 }
 
-/* IMPORTANTE: sem esta regra, o atributo [hidden] definido via JS
-   é silenciosamente ignorado (o "display: flex" acima, sendo uma
-   regra de autor, sempre vence o "display: none" padrão do
-   navegador para [hidden], mesmo com especificidade "empatada").
-   Isso deixava a tela do envelope (com a carta em position:fixed
-   cobrindo 100% da tela) por cima da tela real do convite, mesmo
-   "escondida" — bloqueando todo clique nos botões e no áudio. */
 .splash[hidden] {
   display: none !important;
   pointer-events: none !important;
@@ -126,8 +119,6 @@ img { -webkit-user-drag: none; user-select: none; }
   pointer-events: none;
 }
 
-
-/* Conteúdo central da splash */
 .envelope-scene {
   position: relative;
   z-index: 2;
@@ -145,7 +136,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   ENVELOPE — imagem pronta (assets/envelope.jpg), nunca recriada
+   ENVELOPE
    ========================================================= */
 
 .envelope-visual {
@@ -181,8 +172,6 @@ img { -webkit-user-drag: none; user-select: none; }
   -webkit-user-drag: none;
 }
 
-/* Brilho que desliza sobre o laço dourado a cada alguns segundos.
-   Posição calibrada sobre a faixa do laço na imagem (~51%–60% da altura). */
 .ribbon-glint {
   position: absolute;
   top: 51%;
@@ -214,7 +203,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   CARTA — sobe do envelope e se transforma no convite
+   CARTA
    ========================================================= */
 
 .letter-sparkles {
@@ -283,7 +272,6 @@ img { -webkit-user-drag: none; user-select: none; }
     border-color 1.05s var(--ease-soft), box-shadow 1.05s var(--ease-soft);
 }
 
-/* Cantos ornamentais dourados — reforçam a sensação de convite de gala */
 .letter-corner {
   position: absolute;
   width: 30px;
@@ -308,8 +296,6 @@ img { -webkit-user-drag: none; user-select: none; }
 .letter-card.rising .letter-corner { opacity: 1; }
 .letter-card.expanding .letter-corner { opacity: 0; }
 
-/* Selo de cera com brasão, sobre a carta fechada — "quebra" suavemente
-   ao abrir, reforçando a emoção do gesto */
 .letter-seal {
   position: absolute;
   top: 50%;
@@ -337,7 +323,6 @@ img { -webkit-user-drag: none; user-select: none; }
   50% { filter: drop-shadow(0 6px 18px rgba(212, 175, 106, 0.45)) brightness(1.15); }
 }
 
-/* Brilho de folha de ouro que percorre a moldura da carta */
 .letter-foil-sweep {
   position: absolute;
   inset: 0;
@@ -376,9 +361,6 @@ img { -webkit-user-drag: none; user-select: none; }
   transition: opacity 0.6s ease;
 }
 
-/* Preenche a tela cheia sem barras pretas quando a carta se expande,
-   com uma versão desfocada da própria arte do convite atrás da
-   versão nítida (.letter-art) — mesmo recurso usado na tela final. */
 .letter-backdrop {
   position: absolute;
   inset: -10%;
@@ -524,10 +506,6 @@ img { -webkit-user-drag: none; user-select: none; }
   will-change: transform;
 }
 
-/* Preenche os espaços que sobrariam nas laterais/topo (já que a
-   imagem usa object-fit:contain e não pode ser cortada) com uma
-   versão desfocada e escurecida da própria arte — assim a tela
-   parece cheia, sem barras pretas, sem cortar nada do convite. */
 .invite-backdrop {
   position: absolute;
   inset: -5%;
@@ -539,9 +517,6 @@ img { -webkit-user-drag: none; user-select: none; }
   animation: backdropBreathe 12s ease-in-out infinite;
 }
 
-/* Suaviza a transição entre o desfoque e a arte nítida, e dá um
-   leve tom quente (creme/dourado) à área de fundo, pra ela parecer
-   uma continuação natural do convite em vez de um espaço vazio */
 .invite-backdrop::after {
   content: "";
   position: absolute;
@@ -555,9 +530,6 @@ img { -webkit-user-drag: none; user-select: none; }
   50% { transform: scale(1.16); }
 }
 
-/* Envolve a imagem do convite: alvo do tilt de paralaxe (JS, via
-   pointermove/giroscópio) e da leve "respiração" de zoom contínua —
-   o "movimento no convite" pedido, sutil e nunca distrativo. */
 .invite-image-wrap {
   position: relative;
   z-index: 1;
@@ -584,8 +556,6 @@ img { -webkit-user-drag: none; user-select: none; }
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
 }
 
-/* Recorte animado da personagem — mesmo sistema de alinhamento dos
-   hotspots (posicionado via JS sobre o retângulo real da imagem). */
 .character-frame {
   position: absolute;
   z-index: 1;
@@ -612,8 +582,6 @@ img { -webkit-user-drag: none; user-select: none; }
   100% { transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* Faixa de luz diagonal que atravessa o convite periodicamente —
-   reforça a sensação de peça "viva", como luz entrando por uma janela */
 .invite-shimmer {
   position: absolute;
   inset: 0;
@@ -643,9 +611,6 @@ img { -webkit-user-drag: none; user-select: none; }
 .hotspots-layer {
   position: absolute;
   z-index: 3;
-  /* A camada de hotspots é posicionada exatamente sobre a imagem
-     renderizada (calculado via JS, pois object-fit:contain gera
-     barras vazias que não devem receber cliques) */
   pointer-events: none;
 }
 
@@ -677,8 +642,6 @@ img { -webkit-user-drag: none; user-select: none; }
   50% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -6px 14px rgba(0, 0, 0, 0.06), 0 6px 22px rgba(40, 30, 10, 0.18), 0 0 14px rgba(212, 175, 106, 0.4); }
 }
 
-/* Feedback claro ao tocar/passar o mouse — o botão "acorda", vidro
-   fica um pouco mais claro e "levanta" sutilmente */
 .hotspot:hover,
 .hotspot:focus-visible {
   background: linear-gradient(155deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.08));
@@ -692,8 +655,6 @@ img { -webkit-user-drag: none; user-select: none; }
   transition-duration: 0.12s;
 }
 
-/* Sweep de brilho que atravessa o botão ao tocar — reforça a
-   sensação de componente de app premium */
 .hotspot::after {
   content: "";
   position: absolute;
@@ -717,7 +678,6 @@ img { -webkit-user-drag: none; user-select: none; }
   100% { left: 130%; opacity: 0; }
 }
 
-/* Ondulação dourada ao toque, criada dinamicamente via JS a cada clique */
 .hotspot-ripple {
   position: absolute;
   border-radius: 50%;
@@ -737,7 +697,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   CONTROLE DE MÚSICA FLUTUANTE
+   CONTROLE DE MÚSICA
    ========================================================= */
 
 .music-control {
@@ -755,8 +715,6 @@ img { -webkit-user-drag: none; user-select: none; }
   backdrop-filter: blur(12px) saturate(1.3);
   -webkit-backdrop-filter: blur(12px) saturate(1.3);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  /* Fica quase todo escondido fora da tela, só uma lasca visível no
-     canto — "acorda" e desliza pra dentro quando tocado */
   transform: translateX(60%);
   opacity: 0.75;
   transition:
@@ -790,8 +748,6 @@ img { -webkit-user-drag: none; user-select: none; }
 .music-btn:hover { transform: scale(1.08); background: rgba(212, 175, 106, 0.24); }
 .music-btn:active { transform: scale(0.92); }
 
-/* Volume começa "fechado" (largura zero) — só aparece quando o
-   controle é tocado, mantendo o player discreto por padrão */
 .music-volume {
   width: 0;
   opacity: 0;
@@ -820,15 +776,12 @@ img { -webkit-user-drag: none; user-select: none; }
   .envelope-visual { width: 320px; }
 }
 
-/* Telas muito baixas (paisagem em celular) */
 @media (max-height: 480px) {
   .envelope-visual { width: min(170px, 55vw); margin-bottom: 14px; }
 }
 
 /* =========================================================
-   BORBOLETAS — atravessam a tela em voos contínuos, cada uma
-   com sua própria rota, duração e atraso, para não parecerem
-   repetitivas. As asas batem (flutter) o tempo todo.
+   BORBOLETAS
    ========================================================= */
 .butterflies-layer {
   position: absolute;
@@ -857,8 +810,6 @@ img { -webkit-user-drag: none; user-select: none; }
   animation: wingFlutter 0.42s ease-in-out infinite alternate;
 }
 
-/* Sem asas separadas (é uma ilustração única), então o "bater de
-   asa" é simulado com uma leve pulsação vertical na imagem inteira */
 @keyframes wingFlutter {
   from { transform: scaleY(1) scaleX(1); }
   to   { transform: scaleY(0.86) scaleX(1.04); }
@@ -879,8 +830,6 @@ img { -webkit-user-drag: none; user-select: none; }
   animation-delay: 11s;
 }
 
-/* Rota 1: entra pela esquerda-baixo, sobe cruzando a tela até a
-   direita-alto, com uma leve ondulação senoidal no caminho */
 @keyframes flightPath1 {
   0%   { transform: translate(-10vw, 78vh) rotate(-6deg); opacity: 0; }
   8%   { opacity: 1; }
@@ -891,8 +840,6 @@ img { -webkit-user-drag: none; user-select: none; }
   100% { transform: translate(108vw, 22vh) rotate(-4deg); opacity: 0; }
 }
 
-/* Rota 2: cruza mais alto na tela, direção contrária (direita
-   para esquerda), passando perto do título */
 @keyframes flightPath2 {
   0%   { transform: translate(108vw, 30vh) rotate(8deg); opacity: 0; }
   8%   { opacity: 1; }
@@ -903,8 +850,6 @@ img { -webkit-user-drag: none; user-select: none; }
   100% { transform: translate(-14vw, 24vh) rotate(4deg); opacity: 0; }
 }
 
-/* Rota 3: voo mais lento e amplo, cruzando perto da personagem
-   antes de sumir pelo topo */
 @keyframes flightPath3 {
   0%   { transform: translate(-12vw, 92vh) rotate(-4deg); opacity: 0; }
   10%  { opacity: 1; }
@@ -920,9 +865,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   SAPINHO — salta em direção à personagem, espera perto dela
-   um instante (como se admirasse o vestido), e volta pulando
-   para o canto de onde veio. Um pequeno conto em loop.
+   SAPINHO
    ========================================================= */
 .frog {
   position: absolute;
@@ -943,9 +886,6 @@ img { -webkit-user-drag: none; user-select: none; }
   object-fit: contain;
 }
 
-/* Os "saltos" são feitos por pequenos arcos: sobe e desce (Y)
-   junto com um leve giro, enquanto avança em X aos poucos, até
-   chegar perto dos pés da personagem (agora centralizada) */
 @keyframes frogJourney {
   0%   { transform: translate(0, 0) scale(1, 1) rotate(0deg); }
   4%   { transform: translate(4vw, -14px) scale(0.94, 1.1) rotate(-4deg); }
@@ -958,15 +898,10 @@ img { -webkit-user-drag: none; user-select: none; }
   35%  { transform: translate(35vw, 0) scale(1.05, 0.92) rotate(2deg); }
   40%  { transform: translate(39vw, -14px) scale(0.94, 1.1) rotate(-3deg); }
   44%  { transform: translate(41vw, 0) scale(1.05, 0.92) rotate(0deg); }
-
-  /* pausa perto da personagem, olhando pra cima com uma leve
-     respiração/balanço, como se estivesse admirando o vestido */
   48%  { transform: translate(41vw, 0) rotate(0deg); }
   60%  { transform: translate(41vw, -3px) rotate(2deg); }
   68%  { transform: translate(41vw, 0) rotate(-2deg); }
   74%  { transform: translate(41vw, 0) rotate(0deg); }
-
-  /* volta pulando para o canto inicial */
   79%  { transform: translate(35vw, -15px) scale(0.94, 1.1) rotate(4deg); }
   83%  { transform: translate(29vw, 0) scale(1.05, 0.92) rotate(-2deg); }
   88%  { transform: translate(21vw, -16px) scale(0.94, 1.1) rotate(4deg); }
@@ -984,13 +919,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   CAMADA DE TEXTO EDITÁVEL — todo o conteúdo textual do convite
-   (nome, "XV ANOS", subtítulo, data, hora, textos dos botões) é
-   HTML real, preenchido via JS a partir de config.text no
-   script.js. Nada disso está desenhado na imagem: trocar
-   qualquer texto é só editar a string correspondente.
-   Posicionada sobre o retângulo real da imagem renderizada
-   (calculado via JS, mesma lógica dos hotspots/personagem).
+   CAMADA DE TEXTO
    ========================================================= */
 .text-layer {
   position: absolute;
@@ -1104,9 +1033,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   ÍCONE + TEXTO DENTRO DOS BOTÕES — como a arte agora traz as
-   pílulas vazias, o conteúdo (ícone + rótulo) é montado via JS
-   dentro de cada .hotspot, na mesma linguagem visual do resto.
+   ÍCONE + TEXTO DENTRO DOS BOTÕES
    ========================================================= */
 .hotspot-content {
   display: flex;
@@ -1140,9 +1067,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   BRILHO DA COROA — glow sutil e elegante, ativado após a
-   abertura do convite. Posicionado via JS (positionCrownGlow),
-   acompanhando a arte em qualquer tela.
+   BRILHO DA COROA
    ========================================================= */
 .crown-glow {
   position: absolute;
@@ -1171,8 +1096,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   SAPINHO — pulinho elegante ao toque (camada interna, separada
-   da animação contínua de jornada da camada externa)
+   SAPINHO — PULINHO AO TOQUE
    ========================================================= */
 .frog-tap-layer {
   width: 100%;
@@ -1197,10 +1121,7 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 /* =========================================================
-   ASSINATURA — "Desenvolvido por LéoTech", discreta, no rodapé,
-   com efeito cromado/dourado (mesmo gradiente aplicado ao texto
-   inteiro, via background-clip: text). Some sozinha em telas
-   muito baixas pra nunca brigar com os botões de ação.
+   ASSINATURA — Desenvolvido por LéoTech
    ========================================================= */
 .studio-signature {
   position: absolute;
@@ -1247,6 +1168,10 @@ img { -webkit-user-drag: none; user-select: none; }
 @media (max-height: 620px) {
   .studio-signature { display: none; }
 }
+
+/* =========================================================
+   AJUSTE DA HORA — sobe para melhor encaixe no espaço
+   ========================================================= */
 #txt-time {
   transform: translateY(-15%) !important; /* sobe 15% da altura do elemento */
 }
