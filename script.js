@@ -209,25 +209,26 @@ function enterInvite() {
     envelopeVisual.classList.add("receding");
   }, 1450);
 
-  // 5) leve realce ao se aproximar do topo da tela (~70%)
+// 5) leve realce ao se aproximar do topo da tela (~70%)
   window.setTimeout(() => {
     letterCard.classList.add("at-peak");
-  }, 2000);
+  }, 1600);
 
   // 6) a carta funde com o convite e se expande até tela cheia
   window.setTimeout(() => {
     letterCard.classList.add("expanding");
-  }, 2450);
+  }, 1950);
 
-  // troca para a tela real do convite assim que a carta cobre a tela
+  // troca para a tela real do convite quase junto com o início da
+  // expansão — assim a arte de fundo nunca fica exposta sozinha,
+  // sem a personagem/texto/botões, nem por um instante
   window.setTimeout(() => {
     splashScreen.setAttribute("hidden", "");
     splashScreen.style.display = "none";
     splashScreen.style.pointerEvents = "none";
     inviteScreen.removeAttribute("hidden");
     positionOverlays();
-  }, 3650);
-}
+  }, 2000);
 
 /* =========================================================
    TEXTOS — preenche a camada de texto editável a partir de
