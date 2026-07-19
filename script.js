@@ -228,7 +228,8 @@ function enterInvite() {
     splashScreen.style.pointerEvents = "none";
     inviteScreen.removeAttribute("hidden");
     positionOverlays();
-  }, 2000);
+    }, 2000);
+  },
 
 /* =========================================================
    TEXTOS — preenche a camada de texto editável a partir de
