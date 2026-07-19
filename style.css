@@ -1089,13 +1089,14 @@ img { -webkit-user-drag: none; user-select: none; }
 
 .txt-time {
   left: 58%;
-  top: 58.6%;
+  top: 53.5%;
   width: 40%;
-  height: 5.6%;
+  height: 13%;
   font-family: var(--font-display);
   font-weight: 500;
   letter-spacing: 0.04em;
-  font-size: clamp(0.9rem, 3.2vw, 1.15rem);
+  font-size: clamp(1.15rem, 4.6vw, 1.7rem);
+  line-height: 1.18;
 }
 
 @media (max-width: 360px) {
