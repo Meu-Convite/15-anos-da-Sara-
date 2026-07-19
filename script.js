@@ -113,6 +113,10 @@ const inviteFrame = document.querySelector(".invite-frame");
 const characterFrame = document.getElementById("character-frame");
 const characterLayer = document.getElementById("character-layer");
 const textLayer = document.getElementById("text-layer");
+const crownGlow = document.getElementById("crown-glow");
+const frog = document.getElementById("frog");
+const frogTapLayer = document.getElementById("frog-tap-layer");
+const studioSignature = document.getElementById("studio-signature");
 
 const bgAudio = document.getElementById("bg-audio");
 const musicToggle = document.getElementById("music-toggle");
@@ -147,8 +151,6 @@ letterArt.style.backgroundImage = `url(${bgImageUrl})`;
 letterBackdrop.style.backgroundImage = `url(${bgImageUrl})`;
 if (characterLayer && config.characterLayer && config.characterLayer.src) {
   characterLayer.addEventListener("error", () => {
-    // Se o novo evento não tiver um recorte de personagem, some
-    // silenciosamente em vez de mostrar um ícone de imagem quebrada.
     characterFrame.style.display = "none";
   });
   characterLayer.src = withCacheBust(config.characterLayer.src);
@@ -161,20 +163,6 @@ bgAudio.load();
 
 /* =========================================================
    TRANSIÇÃO CINEMATOGRÁFICA: ENVELOPE -> CONVITE
-   -----------------------------------------------------------
-   A imagem do envelope (assets/envelope.jpg) nunca é redesenhada —
-   ela só é movida/escalada/desvanecida como um todo. O "abrir"
-   é sugerido pelo brilho que passa sobre o laço, pela leve reação
-   do envelope e pela carta que emerge e se transforma no convite.
-
-   Sequência, disparada por um único clique:
-   1) vibração leve (quando suportado)
-   2) música ambiente inicia
-   3) envelope reage (aumenta levemente)
-   4) carta branca sobe com brilho e glitter dourado
-   5) carta ganha um leve realce ao se aproximar do topo (~70%)
-   6) carta funde (fade) com a arte do convite e se expande (zoom)
-      até preencher a tela — "a carta virou o convite"
    ========================================================= */
 enterBtn.addEventListener("click", enterInvite);
 
@@ -185,51 +173,41 @@ function enterInvite() {
   inviteOpened = true;
   enterBtn.disabled = true;
 
-  // 1) vibração leve (silenciosamente ignorada onde não houver suporte, ex.: iOS)
   if (navigator.vibrate) {
     navigator.vibrate(25);
   }
 
-  // 2) música ambiente inicia junto com o gesto de abrir
   attemptPlayMusic();
 
-  // 3) o envelope reage suavemente ao toque
   envelopeScene.classList.add("opening");
   envelopeVisual.classList.add("opening");
 
-  // 4) carta sobe do envelope, com brilho e glitter dourado
   window.setTimeout(() => {
     letterSparkles.classList.add("active");
     letterCard.classList.add("rising");
   }, 650);
 
-  // o envelope recua suavemente, cedendo lugar à carta
   window.setTimeout(() => {
     envelopeVisual.classList.remove("opening");
     envelopeVisual.classList.add("receding");
   }, 1450);
 
-// 5) leve realce ao se aproximar do topo da tela (~70%)
   window.setTimeout(() => {
     letterCard.classList.add("at-peak");
   }, 1600);
 
-  // 6) a carta funde com o convite e se expande até tela cheia
   window.setTimeout(() => {
     letterCard.classList.add("expanding");
   }, 1950);
 
-  // troca para a tela real do convite quase junto com o início da
-  // expansão — assim a arte de fundo nunca fica exposta sozinha,
-  // sem a personagem/texto/botões, nem por um instante
   window.setTimeout(() => {
     splashScreen.setAttribute("hidden", "");
     splashScreen.style.display = "none";
     splashScreen.style.pointerEvents = "none";
     inviteScreen.removeAttribute("hidden");
     positionOverlays();
-    }, 2000);
-  },
+  }, 2000);
+}
 
 /* =========================================================
    TEXTOS — preenche a camada de texto editável a partir de
@@ -277,13 +255,11 @@ function buildHotspots() {
     btn.style.width = spot.width + "%";
     btn.style.height = spot.height + "%";
 
-    // Ícone + rótulo reais (a arte só traz a pílula vazia agora)
     const content = document.createElement("span");
     content.className = "hotspot-content";
     content.innerHTML = (HOTSPOT_ICONS[spot.icon] || "") + "<span>" + (spot.label || "") + "</span>";
     btn.appendChild(content);
 
-    // Ripple dourado ao toque/clique — reforça a sensação de botão "de verdade"
     btn.addEventListener("pointerdown", (e) => {
       const rect = btn.getBoundingClientRect();
       const ripple = document.createElement("span");
@@ -300,7 +276,6 @@ function buildHotspots() {
     btn.addEventListener("click", () => {
       if (navigator.vibrate) navigator.vibrate(15);
       btn.classList.remove("is-pressed");
-      // força reflow pra permitir re-disparar a animação em cliques seguidos
       void btn.offsetWidth;
       btn.classList.add("is-pressed");
       handleHotspotAction(spot.action);
@@ -327,16 +302,9 @@ function handleHotspotAction(action) {
 }
 
 /* =========================================================
-   PREENCHIMENTO DE TELA — em vez de "encolher" a arte inteira
-   dentro da tela (deixando faixas vazias em cima/embaixo em
-   celulares mais altos que a proporção da imagem), a imagem é
-   ampliada além do "contain" tradicional, até quase cobrir a
-   tela inteira. Um limite de corte (MAX_CROP) garante que nunca
-   se corte texto, botões ou a coroa — só a moldura decorativa
-   mais externa pode ficar levemente fora da tela em aparelhos
-   muito altos/estreitos.
+   PREENCHIMENTO DE TELA
    ========================================================= */
-const MAX_CROP = 0.07; // nunca corta mais que 7% de cada lado
+const MAX_CROP = 0.07;
 
 function updateImageScale() {
   const frameRect = inviteFrame.getBoundingClientRect();
@@ -353,10 +321,6 @@ function updateImageScale() {
   inviteImage.style.height = Math.round(ih * finalScale) + "px";
 }
 
-/* A camada de hotspots é alinhada exatamente sobre o retângulo
-   real da imagem renderizada (object-fit: contain pode deixar
-   espaços vazios nas laterais/topo, e cliques ali não podem
-   contar). Recalculado no load da imagem e no resize. */
 function positionHotspots() {
   const frameRect = inviteFrame.getBoundingClientRect();
   const imgRect = inviteImage.getBoundingClientRect();
@@ -367,10 +331,6 @@ function positionHotspots() {
   hotspotsLayer.style.height = imgRect.height + "px";
 }
 
-/* A camada de texto usa exatamente o mesmo retângulo que a
-   camada de hotspots — assim as porcentagens definidas em CSS
-   (.txt-name, .txt-xvanos etc.) sempre caem no lugar certo da
-   arte, em qualquer tela. */
 function positionTextLayer() {
   if (!textLayer) return;
   const frameRect = inviteFrame.getBoundingClientRect();
@@ -382,9 +342,6 @@ function positionTextLayer() {
   textLayer.style.height = imgRect.height + "px";
 }
 
-/* Posiciona o recorte animado da personagem exatamente sobre a mesma
-   figura na arte do convite, usando o mesmo retângulo real da imagem
-   renderizada (mesma lógica de positionHotspots). */
 function positionCharacterLayer() {
   if (!characterFrame || !config.characterLayer) return;
   const frameRect = inviteFrame.getBoundingClientRect();
@@ -402,9 +359,6 @@ function positionCharacterLayer() {
   characterFrame.style.height = height + "px";
 }
 
-/* Brilho suave sobre a coroa — elemento decorativo posicionado
-   pela mesma lógica de percentuais, acompanhando a imagem em
-   qualquer tela. */
 function positionCrownGlow() {
   const glow = document.getElementById("crown-glow");
   if (!glow) return;
@@ -436,20 +390,14 @@ if (inviteImage.complete) {
 window.addEventListener("resize", positionOverlays);
 window.addEventListener("orientationchange", positionOverlays);
 
-// Corrige o atraso entre a moldura aparecer e as informações se
-// encaixarem: observa o tamanho real da imagem continuamente e
-// reposiciona tudo assim que ela estiver pronta, sem depender de
-// um único cálculo que pode pegar a imagem ainda sem tamanho.
 if (window.ResizeObserver) {
   const inviteImageObserver = new ResizeObserver(() => positionOverlays());
   inviteImageObserver.observe(inviteImage);
 }
 
 /* =========================================================
-   SAPINHO — toque interativo. Um pequeno pulo elegante, não
-   confunde com a animação contínua da jornada (que fica na
-   camada externa #frog; o "pulinho" de toque roda só na
-   camada interna #frog-tap-layer). */
+   SAPINHO — toque interativo
+   ========================================================= */
 (function setupFrogTap() {
   const frog = document.getElementById("frog");
   const tapLayer = document.getElementById("frog-tap-layer");
@@ -471,8 +419,7 @@ if (window.ResizeObserver) {
 })();
 
 /* =========================================================
-   ASSINATURA — "Desenvolvido por LéoTech", discreta no rodapé.
-   Ao tocar, abre o WhatsApp do desenvolvedor.
+   ASSINATURA — "Desenvolvido por LéoTech"
    ========================================================= */
 (function setupStudioSignature() {
   const sig = document.getElementById("studio-signature");
@@ -485,10 +432,7 @@ if (window.ResizeObserver) {
 })();
 
 /* =========================================================
-   PARALAXE SUTIL — o convite reage ao ponteiro (desktop) e à
-   inclinação do aparelho (celular), dando profundidade e vida
-   à cena, sem nunca desalinhar hotspots ou a personagem (o tilt
-   é aplicado ao .invite-frame inteiro, como um único plano rígido).
+   PARALLAX SUTIL
    ========================================================= */
 (function setupParallaxTilt() {
   const reduced =
@@ -496,7 +440,7 @@ if (window.ResizeObserver) {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduced) return;
 
-  const maxTilt = 5; // graus
+  const maxTilt = 5;
   let targetX = 0, targetY = 0, curX = 0, curY = 0;
   let rafId = null;
 
@@ -552,7 +496,6 @@ function attemptPlayMusic() {
       musicToggle.setAttribute("aria-label", "Pausar música");
     })
     .catch(() => {
-      // Autoplay bloqueado pelo navegador — usuário poderá tocar manualmente
       musicIcon.textContent = "▶";
     });
 }
@@ -575,9 +518,7 @@ musicVolume.addEventListener("input", (e) => {
 });
 
 /* =========================================================
-   PLAYER DE MÚSICA — discreto por padrão (só o botão), expande
-   pra mostrar o volume ao tocar. Fecha sozinho ao tocar fora.
-   Não interfere na lógica de tocar/pausar acima.
+   PLAYER DE MÚSICA — expande ao tocar
    ========================================================= */
 (function setupMusicExpand() {
   const control = document.getElementById("music-control");
@@ -595,11 +536,11 @@ musicVolume.addEventListener("input", (e) => {
 })();
 
 /* =========================================================
-   PARTÍCULAS DOURADAS + LUZES (canvas, 60fps, leve)
+   PARTÍCULAS DOURADAS
    ========================================================= */
 function createParticleField(canvasEl, options = {}) {
   const ctx = canvasEl.getContext("2d");
-  const density = options.density || 0.00009; // partículas por pixel²
+  const density = options.density || 0.00009;
   const maxSpeed = options.maxSpeed || 0.15;
   const reduced =
     window.matchMedia &&
@@ -634,7 +575,6 @@ function createParticleField(canvasEl, options = {}) {
   function draw(time) {
     ctx.clearRect(0, 0, width, height);
     particles.forEach((p) => {
-      // sobe lentamente, com leve deriva lateral (como pólen/folhas suaves)
       p.y -= p.speed;
       p.x += p.drift;
       if (p.y < -4) {
@@ -658,7 +598,6 @@ function createParticleField(canvasEl, options = {}) {
   if (!reduced) {
     rafId = requestAnimationFrame(draw);
   } else {
-    // Ainda desenha um frame estático, respeitando preferência de menos movimento
     draw(0);
     cancelAnimationFrame(rafId);
   }
@@ -671,13 +610,11 @@ function createParticleField(canvasEl, options = {}) {
   };
 }
 
-/* Campo de partículas da tela inicial (mais denso) */
 createParticleField(document.getElementById("particles-canvas"), {
   density: 0.00012,
   maxSpeed: 0.18,
 });
 
-/* Campo de partículas ambiente da tela do convite (mais discreto) */
 createParticleField(document.getElementById("particles-canvas-invite"), {
   density: 0.00005,
   maxSpeed: 0.1,
