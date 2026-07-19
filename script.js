@@ -434,6 +434,15 @@ if (inviteImage.complete) {
 window.addEventListener("resize", positionOverlays);
 window.addEventListener("orientationchange", positionOverlays);
 
+// Corrige o atraso entre a moldura aparecer e as informações se
+// encaixarem: observa o tamanho real da imagem continuamente e
+// reposiciona tudo assim que ela estiver pronta, sem depender de
+// um único cálculo que pode pegar a imagem ainda sem tamanho.
+if (window.ResizeObserver) {
+  const inviteImageObserver = new ResizeObserver(() => positionOverlays());
+  inviteImageObserver.observe(inviteImage);
+}
+
 /* =========================================================
    SAPINHO — toque interativo. Um pequeno pulo elegante, não
    confunde com a animação contínua da jornada (que fica na
