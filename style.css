@@ -1214,7 +1214,7 @@ img { -webkit-user-drag: none; user-select: none; }
   font-size: clamp(0.58rem, 2vw, 0.72rem);
   letter-spacing: 0.03em;
   color: rgba(212, 175, 106, 0.75);
-  opacity: 0.8;
+  opacity: 0.95;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: opacity 0.3s ease, color 0.3s ease, transform 0.3s var(--ease-soft);
