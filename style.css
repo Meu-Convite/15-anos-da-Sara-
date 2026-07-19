@@ -1247,3 +1247,6 @@ img { -webkit-user-drag: none; user-select: none; }
 @media (max-height: 620px) {
   .studio-signature { display: none; }
 }
+#txt-time {
+  transform: translateY(-15%) !important; /* sobe 15% da altura do elemento */
+}
