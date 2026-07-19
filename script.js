@@ -37,7 +37,7 @@ const config = {
 
   // WhatsApp do desenvolvedor (LéoTech) — usado pela assinatura no
   // rodapé do convite. Formato: DDI+DDD+NÚMERO, só dígitos.
-  developerWhatsapp: "5524999999999",
+  developerWhatsapp: "5524998694118",
   developerWhatsappMessage: "Olá! Vi seu convite digital e quero um também.",
 
   // =========================================================
@@ -52,7 +52,7 @@ const config = {
     diaSemana: "Sábado",
     dia: "26",
     mes: "Julho",
-    ano: "2025",
+    ano: "2026",
     hora: "19:00 H",
   },
 
