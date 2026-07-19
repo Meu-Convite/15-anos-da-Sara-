@@ -17,7 +17,7 @@ const config = {
   // de hoje). Isso força o celular/navegador a baixar os arquivos
   // novos em vez de mostrar a versão antiga guardada em cache — é
   // o mesmo motivo de às vezes só funcionar "trocando de navegador".
-  CACHE_VERSION: "20260718a",
+  CACHE_VERSION: "20260719c",
 
   // Imagem única que representa o convite inteiro
   backgroundImage: "assets/convite.jpg",
@@ -35,6 +35,23 @@ const config = {
   whatsappMessage:
     "Olá! Confirmo minha presença na festa de 15 anos.\nMeu nome é: ",
 
+  // =========================================================
+  // TEXTOS DO CONVITE — 100% editável aqui, sem precisar mexer
+  // em imagem/Canva. Troque qualquer valor abaixo e suba só o
+  // script.js pro GitHub.
+  // =========================================================
+  text: {
+    nome: "Sophia Micaelle",
+    tituloAniversario: "XV Anos",         // aparece como "XV ANOS"
+    subtitulo: "Venha participar\nde uma noite\ninesquecível",
+    diaSemana: "Sábado",
+    dia: "26",
+    mes: "Julho",
+    ano: "2025",
+    hora: "19:00 H",
+    tagline: "Convite personalizado com música",
+  },
+
   // Áreas clicáveis invisíveis sobre a imagem do convite.
   // Cada hotspot é definido em PORCENTAGEM (0–100) em relação
   // à própria imagem — assim funciona em qualquer resolução
@@ -45,22 +62,22 @@ const config = {
   //   action    -> "maps" ou "whatsapp"
   hotspots: {
     localizacao: {
-      x: 15,
-      y: 82.6,
-      width: 30.8,
-      height: 7.2,
+      x: 16.6,
+      y: 83.6,
+      width: 27.7,
+      height: 7.5,
       action: "maps",
-      icon: "📍",
+      icon: "pin",
       label: "Local da festa",
     },
     confirmacao: {
-      x: 48.7,
-      y: 82.6,
-      width: 30.8,
-      height: 7.2,
+      x: 48.3,
+      y: 83.6,
+      width: 33.1,
+      height: 7.5,
       action: "whatsapp",
-      icon: "✅",
-      label: "Confirmar presença",
+      icon: "check",
+      label: "Confirme sua presença",
     },
   },
 
@@ -91,6 +108,7 @@ const hotspotsLayer = document.getElementById("hotspots-layer");
 const inviteFrame = document.querySelector(".invite-frame");
 const characterFrame = document.getElementById("character-frame");
 const characterLayer = document.getElementById("character-layer");
+const textLayer = document.getElementById("text-layer");
 
 const bgAudio = document.getElementById("bg-audio");
 const musicToggle = document.getElementById("music-toggle");
@@ -208,6 +226,43 @@ function enterInvite() {
 }
 
 /* =========================================================
+   TEXTOS — preenche a camada de texto editável a partir de
+   config.text. Nada disso está desenhado na imagem.
+   ========================================================= */
+function renderText() {
+  const t = config.text;
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+  set("txt-name", t.nome);
+  set("txt-xvanos", t.tituloAniversario);
+  set("txt-subtitle", t.subtitulo);
+  set("txt-weekday", t.diaSemana);
+  set("txt-day", t.dia);
+  set("txt-month", t.mes);
+  set("txt-year", t.ano);
+  set("txt-time", t.hora);
+
+  const tagline = document.getElementById("txt-tagline");
+  if (tagline) {
+    tagline.innerHTML = "";
+    const note = document.createElement("span");
+    note.className = "music-note-icon";
+    note.textContent = "♪";
+    tagline.appendChild(note);
+    tagline.appendChild(document.createTextNode(t.tagline));
+  }
+}
+
+/* Ícones simples em SVG (contorno), no mesmo estilo fino e
+   dourado/oliva do resto do convite */
+const HOTSPOT_ICONS = {
+  pin: '<svg class="hotspot-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>',
+  check: '<svg class="hotspot-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>',
+};
+
+/* =========================================================
    HOTSPOTS — posicionamento e ações
    ========================================================= */
 function buildHotspots() {
@@ -225,6 +280,12 @@ function buildHotspots() {
     btn.style.top = spot.y + "%";
     btn.style.width = spot.width + "%";
     btn.style.height = spot.height + "%";
+
+    // Ícone + rótulo reais (a arte só traz a pílula vazia agora)
+    const content = document.createElement("span");
+    content.className = "hotspot-content";
+    content.innerHTML = (HOTSPOT_ICONS[spot.icon] || "") + "<span>" + (spot.label || "") + "</span>";
+    btn.appendChild(content);
 
     // Ripple dourado ao toque/clique — reforça a sensação de botão "de verdade"
     btn.addEventListener("pointerdown", (e) => {
@@ -279,6 +340,21 @@ function positionHotspots() {
   hotspotsLayer.style.height = imgRect.height + "px";
 }
 
+/* A camada de texto usa exatamente o mesmo retângulo que a
+   camada de hotspots — assim as porcentagens definidas em CSS
+   (.txt-name, .txt-xvanos etc.) sempre caem no lugar certo da
+   arte, em qualquer tela. */
+function positionTextLayer() {
+  if (!textLayer) return;
+  const frameRect = inviteFrame.getBoundingClientRect();
+  const imgRect = inviteImage.getBoundingClientRect();
+
+  textLayer.style.left = imgRect.left - frameRect.left + "px";
+  textLayer.style.top = imgRect.top - frameRect.top + "px";
+  textLayer.style.width = imgRect.width + "px";
+  textLayer.style.height = imgRect.height + "px";
+}
+
 /* Posiciona o recorte animado da personagem exatamente sobre a mesma
    figura na arte do convite, usando o mesmo retângulo real da imagem
    renderizada (mesma lógica de positionHotspots). */
@@ -302,8 +378,10 @@ function positionCharacterLayer() {
 function positionOverlays() {
   positionHotspots();
   positionCharacterLayer();
+  positionTextLayer();
 }
 
+renderText();
 buildHotspots();
 
 if (inviteImage.complete) {

@@ -9,9 +9,9 @@
 <!-- Tipografia: serif de exibição elegante + sans utilitária discreta -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Alex+Brush&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css?v=20260718a" />
+<link rel="stylesheet" href="style.css?v=20260719c" />
 </head>
 <body>
 
@@ -33,7 +33,7 @@
   <div class="envelope-scene" id="envelope-scene">
 
     <div class="envelope-visual" id="envelope-visual">
-      <img class="envelope-img" src="assets/envelope.jpg?v=20260718a" alt="Envelope de convite de luxo, verde-oliva com laço dourado e selo de cera" draggable="false" />
+      <img class="envelope-img" src="assets/envelope.jpg?v=20260719c" alt="Envelope de convite de luxo, verde-oliva com laço dourado e selo de cera" draggable="false" />
       <!-- Brilho que desliza sobre o laço dourado periodicamente -->
       <span class="ribbon-glint" aria-hidden="true"></span>
     </div>
@@ -106,10 +106,13 @@
     <div class="invite-shimmer" aria-hidden="true"></div>
 
     <!-- Borboletas douradas que atravessam a tela em voos suaves e
-         contínuos, em looping, com tamanhos/tempos/rotas diferentes -->
+         contínuos, em looping, com tamanhos/tempos/rotas diferentes.
+         b2 usa uma arte espelhada (assets/butterfly2.png) porque voa
+         no sentido contrário — assim ela sempre "olha" pra frente,
+         na direção real do voo. -->
     <div class="butterflies-layer" aria-hidden="true">
       <div class="butterfly b1"><img src="assets/butterfly.png" alt="" draggable="false" /></div>
-      <div class="butterfly b2"><img src="assets/butterfly.png" alt="" draggable="false" /></div>
+      <div class="butterfly b2"><img src="assets/butterfly2.png" alt="" draggable="false" /></div>
       <div class="butterfly b3"><img src="assets/butterfly.png" alt="" draggable="false" /></div>
     </div>
 
@@ -120,9 +123,33 @@
       <img src="assets/frog.png" alt="" draggable="false" />
     </div>
 
-    <!-- Hotspots (áreas clicáveis invisíveis) são injetados aqui via JS,
-         a partir do objeto config.hotspots em script.js -->
+    <!-- Camada de TEXTO EDITÁVEL — todo o conteúdo (nome, data, hora,
+         textos dos botões) é preenchido via JS a partir de config.text
+         em script.js. Não há texto nenhum desenhado na imagem; trocar
+         qualquer informação é só editar o texto lá, sem precisar
+         exportar imagem nova no Canva. Posicionada via JS sobre o
+         retângulo real da imagem, igual aos hotspots/personagem. -->
+    <div id="text-layer" class="text-layer" aria-hidden="false">
+      <div class="txt txt-name" id="txt-name"></div>
+      <div class="txt txt-xvanos" id="txt-xvanos"></div>
+      <div class="txt txt-subtitle" id="txt-subtitle"></div>
+      <div class="txt txt-weekday" id="txt-weekday"></div>
+      <div class="txt txt-day" id="txt-day"></div>
+      <div class="txt txt-month" id="txt-month"></div>
+      <div class="txt txt-year" id="txt-year"></div>
+      <div class="txt txt-time" id="txt-time"></div>
+      <div class="txt txt-tagline" id="txt-tagline"></div>
+    </div>
+
+    <!-- Hotspots (áreas clicáveis, agora com ícone + texto reais, já
+         que a imagem não traz mais nada desenhado dentro dos botões)
+         são injetados aqui via JS, a partir do objeto config.hotspots -->
     <div id="hotspots-layer" class="hotspots-layer" aria-label="Ações do convite"></div>
+
+    <!-- Marca d'água discreta do estúdio, no rodapé do convite -->
+    <div class="studio-logo" aria-hidden="true">
+      <img src="assets/logo.png" alt="LéoTech Creative Studio" draggable="false" />
+    </div>
   </div>
 
   <!-- Controle de música flutuante -->
@@ -137,6 +164,6 @@
 
 <audio id="bg-audio" src="assets/music.mp3" preload="none" loop></audio>
 
-<script src="script.js?v=20260718a"></script>
+<script src="script.js?v=20260719c"></script>
 </body>
 </html>

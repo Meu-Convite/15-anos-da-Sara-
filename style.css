@@ -533,10 +533,21 @@ img { -webkit-user-drag: none; user-select: none; }
   inset: -5%;
   background-size: cover;
   background-position: center;
-  filter: blur(60px) brightness(0.5) saturate(1.15);
-  transform: scale(1.1);
+  filter: blur(50px) brightness(0.88) saturate(1.15);
+  transform: scale(1.12);
   z-index: 0;
   animation: backdropBreathe 12s ease-in-out infinite;
+}
+
+/* Suaviza a transição entre o desfoque e a arte nítida, e dá um
+   leve tom quente (creme/dourado) à área de fundo, pra ela parecer
+   uma continuação natural do convite em vez de um espaço vazio */
+.invite-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(20, 16, 8, 0.35) 100%),
+    linear-gradient(rgba(232, 214, 169, 0.18), rgba(232, 214, 169, 0.18));
 }
 
 @keyframes backdropBreathe {
@@ -856,10 +867,10 @@ img { -webkit-user-drag: none; user-select: none; }
    ========================================================= */
 .frog {
   position: absolute;
-  width: 46px;
-  height: 46px;
+  width: 68px;
+  height: 68px;
   left: 4%;
-  top: 87%;
+  top: 85.5%;
   z-index: 4;
   transform-origin: 50% 85%;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
@@ -910,5 +921,204 @@ img { -webkit-user-drag: none; user-select: none; }
 }
 
 @media (max-width: 420px) {
-  .frog { width: 38px; height: 38px; }
+  .frog { width: 56px; height: 56px; }
+}
+
+/* =========================================================
+   CAMADA DE TEXTO EDITÁVEL — todo o conteúdo textual do convite
+   (nome, "XV ANOS", subtítulo, data, hora, textos dos botões) é
+   HTML real, preenchido via JS a partir de config.text no
+   script.js. Nada disso está desenhado na imagem: trocar
+   qualquer texto é só editar a string correspondente.
+   Posicionada sobre o retângulo real da imagem renderizada
+   (calculado via JS, mesma lógica dos hotspots/personagem).
+   ========================================================= */
+.text-layer {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.txt {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: pre-line;
+  color: var(--olive-dark);
+  line-height: 1.15;
+}
+
+.txt-name {
+  left: 8%;
+  top: 19.5%;
+  width: 84%;
+  height: 11%;
+  font-family: 'Alex Brush', cursive;
+  font-size: clamp(2.1rem, 9.2vw, 3.6rem);
+  line-height: 1;
+}
+
+.txt-xvanos {
+  left: 10%;
+  top: 32%;
+  width: 80%;
+  height: 5.8%;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  font-size: clamp(1.05rem, 4.4vw, 1.6rem);
+}
+
+.txt-subtitle {
+  left: 14%;
+  top: 38.7%;
+  width: 72%;
+  height: 9%;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(0.85rem, 3.1vw, 1.05rem);
+  line-height: 1.32;
+}
+
+.txt-weekday {
+  left: 5%;
+  top: 51.6%;
+  width: 28%;
+  height: 3%;
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: clamp(0.62rem, 2.3vw, 0.82rem);
+}
+
+.txt-day {
+  left: 5%;
+  top: 54.3%;
+  width: 28%;
+  height: 8.2%;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 10.6vw, 3.6rem);
+  line-height: 1;
+}
+
+.txt-month {
+  left: 5%;
+  top: 62.3%;
+  width: 28%;
+  height: 2.6%;
+  font-family: var(--font-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: clamp(0.68rem, 2.5vw, 0.88rem);
+}
+
+.txt-year {
+  left: 5%;
+  top: 64.7%;
+  width: 28%;
+  height: 2.4%;
+  font-family: var(--font-display);
+  font-size: clamp(0.68rem, 2.5vw, 0.88rem);
+  opacity: 0.85;
+}
+
+.txt-time {
+  left: 60%;
+  top: 58.3%;
+  width: 38%;
+  height: 5.6%;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-size: clamp(1.05rem, 3.9vw, 1.4rem);
+}
+
+.txt-tagline {
+  left: 8%;
+  top: 92.2%;
+  width: 84%;
+  height: 3%;
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: clamp(0.5rem, 1.9vw, 0.68rem);
+  gap: 6px;
+  opacity: 0.9;
+}
+
+.txt-tagline .music-note-icon {
+  font-size: 1.15em;
+}
+
+@media (max-width: 360px) {
+  .txt-name { font-size: clamp(1.8rem, 9.5vw, 2.6rem); }
+}
+
+/* =========================================================
+   ÍCONE + TEXTO DENTRO DOS BOTÕES — como a arte agora traz as
+   pílulas vazias, o conteúdo (ícone + rótulo) é montado via JS
+   dentro de cada .hotspot, na mesma linguagem visual do resto.
+   ========================================================= */
+.hotspot-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--olive-dark);
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: clamp(0.56rem, 2.15vw, 0.78rem);
+  font-weight: 500;
+  line-height: 1.08;
+  padding: 0 5%;
+  text-align: center;
+}
+
+.hotspot-content span {
+  max-width: 100%;
+}
+
+.hotspot-icon {
+  flex-shrink: 0;
+  width: clamp(13px, 4vw, 18px);
+  height: clamp(13px, 4vw, 18px);
+  stroke: var(--olive-dark);
+}
+
+@media (max-width: 360px) {
+  .hotspot-content { gap: 5px; font-size: clamp(0.52rem, 2.3vw, 0.66rem); }
+}
+
+/* =========================================================
+   MARCA D'ÁGUA DO ESTÚDIO — discreta, no rodapé do convite.
+   Some sozinha em telas muito baixas pra nunca brigar com os
+   botões de ação, que são o que importa por último na tela.
+   ========================================================= */
+.studio-logo {
+  position: absolute;
+  left: 50%;
+  bottom: 0.8%;
+  transform: translateX(-50%);
+  width: clamp(50px, 12vw, 74px);
+  opacity: 0.45;
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+}
+
+.studio-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-height: 620px) {
+  .studio-logo { display: none; }
 }
