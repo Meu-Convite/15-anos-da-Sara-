@@ -1223,7 +1223,7 @@ img { -webkit-user-drag: none; user-select: none; }
 .studio-signature span {
   font-family: 'Alex Brush', cursive;
   font-size: 1.5em;
-  color: var(--gold-bright);
+  color: var(--gold-dark);
   margin-left: 2px;
 }
 
