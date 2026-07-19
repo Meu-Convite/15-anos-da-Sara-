@@ -1204,7 +1204,7 @@ img { -webkit-user-drag: none; user-select: none; }
 .studio-signature {
   position: absolute;
   left: 50%;
-  bottom: 0.9%;
+  bottom: 3.2%;
   transform: translateX(-50%);
   z-index: 3;
   background: none;
