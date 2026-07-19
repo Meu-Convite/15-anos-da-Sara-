@@ -54,7 +54,6 @@ const config = {
     mes: "Julho",
     ano: "2025",
     hora: "19:00 H",
-    tagline: "Convite personalizado com música",
   },
 
   // Áreas clicáveis invisíveis sobre a imagem do convite.
@@ -69,16 +68,16 @@ const config = {
     localizacao: {
       x: 16.6,
       y: 83.6,
-      width: 27.7,
+      width: 30.4,
       height: 7.5,
       action: "maps",
       icon: "pin",
       label: "Local da festa",
     },
     confirmacao: {
-      x: 48.3,
+      x: 51.0,
       y: 83.6,
-      width: 33.1,
+      width: 30.4,
       height: 7.5,
       action: "whatsapp",
       icon: "check",
@@ -248,16 +247,6 @@ function renderText() {
   set("txt-month", t.mes);
   set("txt-year", t.ano);
   set("txt-time", t.hora);
-
-  const tagline = document.getElementById("txt-tagline");
-  if (tagline) {
-    tagline.innerHTML = "";
-    const note = document.createElement("span");
-    note.className = "music-note-icon";
-    note.textContent = "♪";
-    tagline.appendChild(note);
-    tagline.appendChild(document.createTextNode(t.tagline));
-  }
 }
 
 /* Ícones simples em SVG (contorno), no mesmo estilo fino e
