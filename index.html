@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Alex+Brush&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css?v=20260719c" />
+<link rel="stylesheet" href="style.css?v=20260720a" />
 </head>
 <body>
 
@@ -33,7 +33,7 @@
   <div class="envelope-scene" id="envelope-scene">
 
     <div class="envelope-visual" id="envelope-visual">
-      <img class="envelope-img" src="assets/envelope.jpg?v=20260719c" alt="Envelope de convite de luxo, verde-oliva com laço dourado e selo de cera" draggable="false" />
+      <img class="envelope-img" src="assets/envelope.jpg?v=20260720a" alt="Envelope de convite de luxo, verde-oliva com laço dourado e selo de cera" draggable="false" />
       <!-- Brilho que desliza sobre o laço dourado periodicamente -->
       <span class="ribbon-glint" aria-hidden="true"></span>
     </div>
@@ -101,6 +101,9 @@
       <img id="character-layer" class="character-layer" src="assets/personagem.png" alt="" draggable="false" />
     </div>
 
+    <!-- Brilho suave sobre a coroa, ativado após a abertura -->
+    <div id="crown-glow" class="crown-glow" aria-hidden="true"></div>
+
     <!-- Faixa de luz que percorre o convite periodicamente, reforçando a
          sensação de "convite vivo" -->
     <div class="invite-shimmer" aria-hidden="true"></div>
@@ -118,9 +121,13 @@
 
     <!-- Sapinho que salta pela tela em direção à personagem, faz uma
          pausa perto dela, e depois volta — um pequeno "conto" que
-         se repete em loop -->
+         se repete em loop. Também reage ao toque: dá um pequeno pulo
+         elegante (a animação de toque roda na camada interna, sem
+         atrapalhar a jornada contínua da camada externa). -->
     <div id="frog" class="frog" aria-hidden="true">
-      <img src="assets/frog.png" alt="" draggable="false" />
+      <div id="frog-tap-layer" class="frog-tap-layer">
+        <img src="assets/frog.png" alt="" draggable="false" />
+      </div>
     </div>
 
     <!-- Camada de TEXTO EDITÁVEL — todo o conteúdo (nome, data, hora,
@@ -146,10 +153,11 @@
          são injetados aqui via JS, a partir do objeto config.hotspots -->
     <div id="hotspots-layer" class="hotspots-layer" aria-label="Ações do convite"></div>
 
-    <!-- Marca d'água discreta do estúdio, no rodapé do convite -->
-    <div class="studio-logo" aria-hidden="true">
-      <img src="assets/logo.png" alt="LéoTech Creative Studio" draggable="false" />
-    </div>
+    <!-- Assinatura discreta do estúdio — texto, não imagem. Ao tocar,
+         abre o WhatsApp do desenvolvedor (config.developerWhatsapp). -->
+    <button type="button" id="studio-signature" class="studio-signature">
+      Desenvolvido por <span>LéoTech</span>
+    </button>
   </div>
 
   <!-- Controle de música flutuante -->
@@ -164,6 +172,6 @@
 
 <audio id="bg-audio" src="assets/music.mp3" preload="none" loop></audio>
 
-<script src="script.js?v=20260719c"></script>
+<script src="script.js?v=20260720a"></script>
 </body>
 </html>

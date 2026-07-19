@@ -17,7 +17,7 @@ const config = {
   // de hoje). Isso força o celular/navegador a baixar os arquivos
   // novos em vez de mostrar a versão antiga guardada em cache — é
   // o mesmo motivo de às vezes só funcionar "trocando de navegador".
-  CACHE_VERSION: "20260719c",
+  CACHE_VERSION: "20260720a",
 
   // Imagem única que representa o convite inteiro
   backgroundImage: "assets/convite.jpg",
@@ -34,6 +34,11 @@ const config = {
   // Mensagem automática de confirmação de presença
   whatsappMessage:
     "Olá! Confirmo minha presença na festa de 15 anos.\nMeu nome é: ",
+
+  // WhatsApp do desenvolvedor (LéoTech) — usado pela assinatura no
+  // rodapé do convite. Formato: DDI+DDD+NÚMERO, só dígitos.
+  developerWhatsapp: "5524999999999",
+  developerWhatsappMessage: "Olá! Vi seu convite digital e quero um também.",
 
   // =========================================================
   // TEXTOS DO CONVITE — 100% editável aqui, sem precisar mexer
@@ -88,10 +93,10 @@ const config = {
   // números e a imagem em assets/personagem.png.
   characterLayer: {
     src: "assets/personagem.png",
-    x: 24.5,
-    y: 48,
-    width: 51,
-    height: 40,
+    x: 22,
+    y: 46,
+    width: 56,
+    height: 44,
   },
 };
 
@@ -303,6 +308,10 @@ function buildHotspots() {
 
     btn.addEventListener("click", () => {
       if (navigator.vibrate) navigator.vibrate(15);
+      btn.classList.remove("is-pressed");
+      // força reflow pra permitir re-disparar a animação em cliques seguidos
+      void btn.offsetWidth;
+      btn.classList.add("is-pressed");
       handleHotspotAction(spot.action);
     });
     hotspotsLayer.appendChild(btn);
@@ -324,6 +333,33 @@ function handleHotspotAction(action) {
     const url = `https://wa.me/${config.whatsappNumber}?text=${text}`;
     window.open(url, "_blank", "noopener");
   }
+}
+
+/* =========================================================
+   PREENCHIMENTO DE TELA — em vez de "encolher" a arte inteira
+   dentro da tela (deixando faixas vazias em cima/embaixo em
+   celulares mais altos que a proporção da imagem), a imagem é
+   ampliada além do "contain" tradicional, até quase cobrir a
+   tela inteira. Um limite de corte (MAX_CROP) garante que nunca
+   se corte texto, botões ou a coroa — só a moldura decorativa
+   mais externa pode ficar levemente fora da tela em aparelhos
+   muito altos/estreitos.
+   ========================================================= */
+const MAX_CROP = 0.07; // nunca corta mais que 7% de cada lado
+
+function updateImageScale() {
+  const frameRect = inviteFrame.getBoundingClientRect();
+  const iw = inviteImage.naturalWidth;
+  const ih = inviteImage.naturalHeight;
+  if (!iw || !ih || !frameRect.width || !frameRect.height) return;
+
+  const containScale = Math.min(frameRect.width / iw, frameRect.height / ih);
+  const coverScale = Math.max(frameRect.width / iw, frameRect.height / ih);
+  const cappedScale = containScale / (1 - 2 * MAX_CROP);
+  const finalScale = Math.min(coverScale, cappedScale);
+
+  inviteImage.style.width = Math.round(iw * finalScale) + "px";
+  inviteImage.style.height = Math.round(ih * finalScale) + "px";
 }
 
 /* A camada de hotspots é alinhada exatamente sobre o retângulo
@@ -375,10 +411,27 @@ function positionCharacterLayer() {
   characterFrame.style.height = height + "px";
 }
 
+/* Brilho suave sobre a coroa — elemento decorativo posicionado
+   pela mesma lógica de percentuais, acompanhando a imagem em
+   qualquer tela. */
+function positionCrownGlow() {
+  const glow = document.getElementById("crown-glow");
+  if (!glow) return;
+  const frameRect = inviteFrame.getBoundingClientRect();
+  const imgRect = inviteImage.getBoundingClientRect();
+
+  glow.style.left = imgRect.left - frameRect.left + imgRect.width * 0.5 + "px";
+  glow.style.top = imgRect.top - frameRect.top + imgRect.height * 0.115 + "px";
+  glow.style.width = imgRect.width * 0.34 + "px";
+  glow.style.height = imgRect.width * 0.34 + "px";
+}
+
 function positionOverlays() {
+  updateImageScale();
   positionHotspots();
   positionCharacterLayer();
   positionTextLayer();
+  positionCrownGlow();
 }
 
 renderText();
@@ -391,6 +444,45 @@ if (inviteImage.complete) {
 }
 window.addEventListener("resize", positionOverlays);
 window.addEventListener("orientationchange", positionOverlays);
+
+/* =========================================================
+   SAPINHO — toque interativo. Um pequeno pulo elegante, não
+   confunde com a animação contínua da jornada (que fica na
+   camada externa #frog; o "pulinho" de toque roda só na
+   camada interna #frog-tap-layer). */
+(function setupFrogTap() {
+  const frog = document.getElementById("frog");
+  const tapLayer = document.getElementById("frog-tap-layer");
+  if (!frog || !tapLayer) return;
+
+  frog.style.pointerEvents = "auto";
+  frog.style.cursor = "pointer";
+  frog.setAttribute("role", "button");
+  frog.setAttribute("aria-label", "Sapinho");
+
+  frog.addEventListener("click", () => {
+    if (tapLayer.classList.contains("frog-tap")) return;
+    tapLayer.classList.add("frog-tap");
+    if (navigator.vibrate) navigator.vibrate(10);
+  });
+  tapLayer.addEventListener("animationend", () => {
+    tapLayer.classList.remove("frog-tap");
+  });
+})();
+
+/* =========================================================
+   ASSINATURA — "Desenvolvido por LéoTech", discreta no rodapé.
+   Ao tocar, abre o WhatsApp do desenvolvedor.
+   ========================================================= */
+(function setupStudioSignature() {
+  const sig = document.getElementById("studio-signature");
+  if (!sig) return;
+  sig.addEventListener("click", () => {
+    const text = encodeURIComponent(config.developerWhatsappMessage || "");
+    const url = `https://wa.me/${config.developerWhatsapp}?text=${text}`;
+    window.open(url, "_blank", "noopener");
+  });
+})();
 
 /* =========================================================
    PARALAXE SUTIL — o convite reage ao ponteiro (desktop) e à
@@ -481,6 +573,26 @@ musicToggle.addEventListener("click", () => {
 musicVolume.addEventListener("input", (e) => {
   bgAudio.volume = parseFloat(e.target.value);
 });
+
+/* =========================================================
+   PLAYER DE MÚSICA — discreto por padrão (só o botão), expande
+   pra mostrar o volume ao tocar. Fecha sozinho ao tocar fora.
+   Não interfere na lógica de tocar/pausar acima.
+   ========================================================= */
+(function setupMusicExpand() {
+  const control = document.getElementById("music-control");
+  if (!control) return;
+
+  musicToggle.addEventListener("click", () => {
+    control.classList.add("is-expanded");
+  });
+
+  document.addEventListener("pointerdown", (e) => {
+    if (!control.contains(e.target)) {
+      control.classList.remove("is-expanded");
+    }
+  });
+})();
 
 /* =========================================================
    PARTÍCULAS DOURADAS + LUZES (canvas, 60fps, leve)
