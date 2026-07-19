@@ -53,7 +53,7 @@ const config = {
     dia: "26",
     mes: "Julho",
     ano: "2026",
-    hora: "19:00 H",
+    hora: "19\n00\nH",
   },
 
   // Áreas clicáveis invisíveis sobre a imagem do convite.
